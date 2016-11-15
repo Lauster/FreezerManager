@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ItemList {
     private Context context;
-    private ArrayList<String> itemList;
+    private ArrayList<Item> itemList;
 
     public ItemList(Context context) {
         this.context = context;
@@ -21,7 +21,7 @@ public class ItemList {
     }
 
     public void addItem(String name) {
-        this.itemList.add(name);
+        this.itemList.add(new Item(name));
 
         saveItems();
     }
@@ -30,7 +30,7 @@ public class ItemList {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         Gson g = new Gson();
 
-        this.itemList = (ArrayList<String>) g.fromJson(prefs.getString("items", g.toJson(new ArrayList<String>())), ArrayList.class);
+        this.itemList = (ArrayList<Item>) g.fromJson(prefs.getString("items", g.toJson(new ArrayList<String>())), ArrayList.class);
     }
 
     private void saveItems() {

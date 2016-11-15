@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter;
         ListView lv  = (ListView)findViewById(R.id.itemList);
 
-        adapter = new ArrayAdapter<String>(
+        adapter = new ArrayAdapter(
                 this,
                 android.R.layout.simple_list_item_1,
                 freezedItems.getAllItems());
@@ -68,6 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void createItem(View view) {
         Intent intent = new Intent(this, NewItemActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 10);
     }
 }
