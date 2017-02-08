@@ -7,5 +7,6 @@
         android:id="@+id/new_item_done"
         android:title="@string/new_item_done"
         app:showAsAction="always"
-        android:icon="@drawable/ic_check_black_24dp"/>
+        android:icon="@drawable/ic_check_black_24dp"
+        android:onClick="saveItem"/>
 </menu>

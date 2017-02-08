@@ -15,9 +15,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -26,6 +28,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ItemList freezedItems;
+
+    static final int NEW_ITEM_REQUEST = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
         freezedItems = new ItemList(this);
         showItems();
+
+        ListView listView = (ListView) findViewById(R.id.itemList);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
+                itemDetail.putExtra("position", i);
+                startActivity(itemDetail);
+            }
+        });
     }
 
     @Override
@@ -81,39 +95,36 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case NEW_ITEM_REQUEST:
+                Item newItem = new Item(data.getStringExtra("name"));
+                newItem.setWeight(data.getFloatExtra("weight", -1));
+                newItem.setCategory(data.getStringExtra("category"));
+
+                freezedItems.addItem(newItem);
+
+                this.showItems();
+                break;
+            default:
+                Toast.makeText(this, requestCode + "\n" + resultCode, Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
     public void showItems() {
+        final ArrayList<Item> allItems = freezedItems.getAllItems();
         ArrayAdapter<String> adapter;
-        ListView lv  = (ListView)findViewById(R.id.itemList);
+        ListView lv = (ListView) findViewById(R.id.itemList);
 
-        final ArrayList<String> items = new ArrayList<>();
-        items.add("Kaninchen");
-        items.add("Schweinelende");
-        items.add("2x Putenschnitzel");
-        items.add("15 Fischstäbchen");
-        items.add("Himbeeren");
-        items.add("Rotkohl");
-        items.add("Vollkornbrot");
-
-        final ArrayList<String> items_sub = new ArrayList<>();
-        items_sub.add("23.09.2015 | 1,2 kg");
-        items_sub.add("11.11.2015 | 0,5 kg");
-        items_sub.add("05.10.2016 | 0,5 kg");
-        items_sub.add("28.05.2016");
-        items_sub.add("01.08.2015 | 0,5 kg");
-        items_sub.add("20.06.2016 | 0,4 kg");
-        items_sub.add("07.10.2016 | 1 kg");
-
-        /*adapter = new ArrayAdapter(
-                this,
-                android.R.layout.simple_list_item_1,
-                freezedItems.getAllItems());*/
-        adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_2, android.R.id.text1, items) {
+        adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_2, android.R.id.text1, allItems) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                 TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-                text1.setText(items.get(position));
-                text2.setText(items_sub.get(position));
+                text1.setText(allItems.get(position).getName());
+                text2.setText(allItems.get(position).getCategory());
                 return view;
             }
         };
@@ -122,6 +133,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void createItem(View view) {
         Intent intent = new Intent(this, NewItemActivity.class);
-        startActivityForResult(intent, 10);
+        startActivityForResult(intent, NEW_ITEM_REQUEST);
     }
 }

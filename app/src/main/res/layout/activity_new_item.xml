@@ -29,7 +29,7 @@
             android:hint="Name"
             android:ems="10"
             android:layout_gravity="center_vertical"
-            android:id="@+id/editText" />
+            android:id="@+id/newItemName" />
 
     </LinearLayout>
 
@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:inputType="numberDecimal"
             android:ems="10"
-            android:id="@+id/editText2"
+            android:id="@+id/newItemWeight"
             android:hint="@string/weight"
             android:layout_weight="1" />
 
@@ -65,10 +65,10 @@
         android:inputType="date"
         android:ems="10"
         android:hint="@string/exp_date"
-        android:id="@+id/editText3"/>
+        android:id="@+id/newItemExpDate"/>
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/categories" />
+        android:id="@+id/newItemCategory" />
 </LinearLayout>

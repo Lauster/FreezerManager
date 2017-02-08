@@ -28,4 +28,8 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         setTitle("Ente");
     }
+
+    private void fillWithItemData(Item item) {
+
+    }
 }

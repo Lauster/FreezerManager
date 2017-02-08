@@ -7,9 +7,11 @@ public class Item {
     private float weight;
     private Date freezeDate;
     private Date expDate;
+    private String category;
 
     public Item(String name) {
         setName(name);
+        setFreezeDate(new Date());
     }
 
     public float getWeight() {
@@ -34,6 +36,14 @@ public class Item {
 
     public void setFreezeDate(Date freezeDate) {
         this.freezeDate = freezeDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getName() {

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class ItemList {
@@ -20,8 +22,12 @@ public class ItemList {
         return this.itemList;
     }
 
-    public void addItem(String name) {
-        this.itemList.add(new Item(name));
+    public Item getItem(int position) {
+        return this.itemList.get(position);
+    }
+
+    public void addItem(Item item) {
+        this.itemList.add(item);
 
         saveItems();
     }
@@ -29,14 +35,15 @@ public class ItemList {
     private void loadItems() {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         Gson g = new Gson();
-
-        this.itemList = (ArrayList<Item>) g.fromJson(prefs.getString("items", g.toJson(new ArrayList<String>())), ArrayList.class);
+        Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+        this.itemList = (ArrayList<Item>) g.fromJson(prefs.getString("items", g.toJson(new ArrayList<Item>())), type);
     }
 
     private void saveItems() {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         Gson g = new Gson();
 
-        prefs.edit().putString("items", g.toJson(this.itemList)).commit();
+        Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+        prefs.edit().putString("items", g.toJson(this.itemList, type)).commit();
     }
 }
