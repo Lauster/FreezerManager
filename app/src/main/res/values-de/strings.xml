@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Gefierschrank Manager</string>
+    <string name="app_name">Gefrierschrank</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="action_sort">Sortieren</string>
+    <string name="action_filter">Filtern</string>
+    <string name="change_photo">Ändern</string>
+    <string name="new_item_done">Fertig</string>
+    <string name="title_activity_item_detail"></string>
+    <string name="title_activity_new_item">Essen einfrieren</string>
+    <string name="app_name_full">Gefrierschrank Manager</string>
+    <string name="weight">Gewicht</string>
+    <string name="exp_date">Haltbarkeitsdatum</string>
+    <string name="category">Kategorie</string>
+    <string name="meat">Fleisch</string>
+    <string name="fruits">Obst</string>
+    <string name="vegetables">Gemüse</string>
+    <string name="fish">Fisch</string>
+    <string name="pastry">Gebäck</string>
+    <string name="roll">Brot</string>
+    <string name="fast_food">Fast Food</string>
+    <string name="ice_cream">Eis</string>
+    <string name="other">Sonstiges</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="pref_title_ringtone">Benachrichtigungston</string>
+    <string name="pref_title_notification_expiration">Vor Ablauf benachrichtigen</string>
+    <string name="pref_title_vibrate">Vibrieren</string>
+    <string name="pref_header_notifications">Benachrichtigungen</string>
+    <string name="pref_header_layout">Gefrierschrankaufbau</string>
+    <string name="pref_title_sections">Anzahl der Fächer</string>
+    <string name="four_weeks">4 Wochen</string>
+    <string name="never">Nie</string>
+    <string name="one_week">1 Woche</string>
+    <string name="three_days">3 Tage</string>
+    <string name="three_weeks">3 Wochen</string>
+    <string name="two_weeks">2 Wochen</string>
 </resources>

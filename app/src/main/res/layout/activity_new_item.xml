@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_new_item"
     android:layout_width="match_parent"
@@ -11,14 +12,26 @@
     android:orientation="vertical"
     tools:context="de.geek_hub.freezermanager.NewItemActivity">
 
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:inputType="textPersonName"
-        android:hint="Name"
-        android:ems="10"
-        android:id="@+id/editText" />
+        android:layout_height="75dp">
+
+        <ImageButton
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_add_a_photo_black_24dp"
+            android:tint="@android:color/white" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="textPersonName"
+            android:hint="Name"
+            android:ems="10"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/editText" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -31,7 +44,7 @@
             android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/editText2"
-            android:hint="Weight"
+            android:hint="@string/weight"
             android:layout_weight="1" />
 
         <TextView
@@ -41,6 +54,7 @@
             android:id="@+id/textView2"
             android:layout_weight="0"
             android:textSize="18sp"
+            android:paddingStart="16dp"
             android:paddingLeft="16dp"
             android:gravity="center_vertical" />
     </LinearLayout>
@@ -50,7 +64,7 @@
         android:layout_height="50dp"
         android:inputType="date"
         android:ems="10"
-        android:hint="Expiration Date"
+        android:hint="@string/exp_date"
         android:id="@+id/editText3"/>
 
     <Spinner

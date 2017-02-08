@@ -1,7 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="de.geek_hub.freezermanager.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_sort"
@@ -9,6 +8,19 @@
         android:title="@string/action_sort"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_sort_black_24dp"/>
+
+    <item
+        android:id="@+id/action_filter"
+        android:orderInCategory="11"
+        android:title="@string/action_filter"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_filter_list_black_24dp" />
+
+    <item
+        android:id="@+id/action_item_detail"
+        android:orderInCategory="90"
+        android:title="Item detail"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_settings"

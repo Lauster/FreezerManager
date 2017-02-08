@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="de.geek_hub.freezermanager.ItemDetailActivity"
+    tools:showIn="@layout/activity_item_detail">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="Gewicht: 1.5 kg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="Einfrierdatum: 22.07.2016" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="Haltbarkeitsdatum: 22.04.2017" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="Kategorie: Fleisch" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
