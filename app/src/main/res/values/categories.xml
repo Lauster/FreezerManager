@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Important: Content and order has to match categories_ids.xml! -->
+<!-- Important: Order and content of all arrays has to match! -->
 <resources>
+    <string-array name="category_ids">
+        <item>meat</item>
+        <item>fruits</item>
+        <item>vegetables</item>
+        <item>fish</item>
+        <item>pastry</item>
+        <item>roll</item>
+        <item>fast_food</item>
+        <item>ice_cream</item>
+        <item>other</item>
+    </string-array>
+
     <string-array name="categories">
         <item>@string/meat</item>
         <item>@string/fruits</item>

@@ -1,20 +1,19 @@
 package de.geek_hub.freezermanager;
 
 import android.content.Intent;
-import android.content.SyncStatusObserver;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class NewItemActivity extends AppCompatActivity {
 
@@ -23,11 +22,29 @@ public class NewItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        Spinner spinner = (Spinner) findViewById(R.id.newItemCategory);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-            R.array.categories, R.layout.categories_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        Spinner unitSpinner = (Spinner) findViewById(R.id.new_item_unit);
+        ArrayAdapter<CharSequence> unitAdapter = ArrayAdapter.createFromResource(this,
+                R.array.units, R.layout.spinner_item);
+        unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitSpinner.setAdapter(unitAdapter);
+
+        unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] unitLabels = getResources().getStringArray(R.array.unit_labels);
+                ((EditText) findViewById(R.id.new_item_size)).setHint(unitLabels[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        Spinner categorySpinner = (Spinner) findViewById(R.id.new_item_category);
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this,
+            R.array.categories, R.layout.spinner_item);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(categoryAdapter);
     }
 
     @Override
@@ -49,24 +66,28 @@ public class NewItemActivity extends AppCompatActivity {
     }
 
     public void saveItem (MenuItem item) {
-        String name = ((EditText) findViewById(R.id.newItemName)).getText().toString().trim();
+        String name = ((EditText) findViewById(R.id.new_item_name)).getText().toString().trim();
 
         if (name.isEmpty()) {
-            Toast.makeText(this, R.string.insert_name, Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.activity_new_item), R.string.insert_name, Snackbar.LENGTH_SHORT).show();
         } else {
-            String weightStr = ((EditText) findViewById(R.id.newItemWeight)).getText().toString().trim();
-            Float weight = null;
-            if (!weightStr.isEmpty()) {
-                weight = Float.parseFloat(weightStr); // TODO: localisation
+            Item newItem = new Item(name);
+
+            String sizeStr = ((EditText) findViewById(R.id.new_item_size)).getText().toString().trim();
+            if (sizeStr.isEmpty()) {
+                newItem.setSize(-1);
+            } else {
+                newItem.setSize(Float.parseFloat(sizeStr)); // TODO: localisation
             }
 
-            String[] categories = getResources().getStringArray(R.array.categories_ids);
-            String category = categories[((Spinner) findViewById(R.id.newItemCategory)).getSelectedItemPosition()];
+            String[] units = getResources().getStringArray(R.array.unit_ids);
+            newItem.setUnit(units[((Spinner) findViewById(R.id.new_item_unit)).getSelectedItemPosition()]);
+
+            String[] categories = getResources().getStringArray(R.array.category_ids);
+            newItem.setCategory(categories[((Spinner) findViewById(R.id.new_item_category)).getSelectedItemPosition()]);
 
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("name", name);
-            returnIntent.putExtra("weight", weight);
-            returnIntent.putExtra("category", category);
+            returnIntent.putExtra("newItem", newItem);
             setResult(RESULT_OK, returnIntent);
             super.finish();
         }

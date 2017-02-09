@@ -34,4 +34,19 @@
     <string name="three_days">3 Tage</string>
     <string name="three_weeks">3 Wochen</string>
     <string name="two_weeks">2 Wochen</string>
+    <string name="item_detail_weight">Gewicht: </string>
+    <string name="item_detail_freeze_date">Einfrierdatum: </string>
+    <string name="item_detail_exp_date">Haltbarkeitsdatum: </string>
+    <string name="item_detail_category">Kategorie: </string>
+    <string name="insert_name">Bitte gib einen Namen ein</string>
+    <string name="snackbar_defrost">\u0020aufgetaut</string>
+    <string name="snackbar_defrost_undo">Rückgängig</string>
+    <string name="mass">g</string>
+    <string name="pieces">St.</string>
+    <string name="volume">ml</string>
+    <string name="volume_label">Volumen</string>
+    <string name="pieces_label">Anzahl</string>
+    <string name="mass_label">Gewicht</string>
+    <string name="pref_notification_before">vorher</string>
+    <string name="pref_ringtone_silent">Stumm</string>
 </resources>

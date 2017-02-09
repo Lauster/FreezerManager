@@ -1,11 +1,8 @@
 package de.geek_hub.freezermanager;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -20,16 +17,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ItemList freezedItems;
+    private ItemList frozenItems;
+    private ArrayAdapter<String> listAdapter;
 
     static final int NEW_ITEM_REQUEST = 10;
+    static final int ITEM_DETAIL_REQUEST = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        freezedItems = new ItemList(this);
+        this.frozenItems = new ItemList(this);
         showItems();
 
         ListView listView = (ListView) findViewById(R.id.itemList);
@@ -46,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
-                itemDetail.putExtra("position", i);
-                startActivity(itemDetail);
+                itemDetail.putExtra("item", frozenItems.getItem(i));
+                itemDetail.putExtra("id", i);
+                startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
             }
         });
     }
@@ -81,31 +77,48 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_item_detail:
-                Intent itemDetail = new Intent(this, ItemDetailActivity.class);
-                startActivity(itemDetail);
-                break;
             case R.id.action_settings:
                 Intent settings = new Intent(this, SettingsActivity.class);
                 startActivity(settings);
             default:
                 return true;
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case NEW_ITEM_REQUEST:
-                Item newItem = new Item(data.getStringExtra("name"));
-                newItem.setWeight(data.getFloatExtra("weight", -1));
-                newItem.setCategory(data.getStringExtra("category"));
+                Item newItem = data.getParcelableExtra("newItem");
 
-                freezedItems.addItem(newItem);
+                frozenItems.addItem(newItem);
 
                 this.showItems();
+                break;
+            case ITEM_DETAIL_REQUEST:
+                switch (data.getStringExtra("action")) {
+                    case "defrost":
+                        final Item deletedItem = this.frozenItems.deleteItem(data.getIntExtra("id", -1));
+                        this.listAdapter.notifyDataSetChanged();
+                        Snackbar.make(findViewById(R.id.main_activity_coordinator_layout),
+                                    deletedItem.getName() + getResources().getString(R.string.snackbar_defrost),
+                                    Snackbar.LENGTH_LONG)
+                                .setAction(R.string.snackbar_defrost_undo, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        frozenItems.addItem(deletedItem);
+                                        listAdapter.notifyDataSetChanged();
+                                    }
+                                }).setActionTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                                .show();
+                        break;
+                    case "edit":
+                        Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
+                        itemDetail.putExtra("item", frozenItems.getItem(0));
+                        itemDetail.putExtra("id", 0);
+                        startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
+                        break;
+                }
                 break;
             default:
                 Toast.makeText(this, requestCode + "\n" + resultCode, Toast.LENGTH_SHORT).show();
@@ -114,11 +127,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showItems() {
-        final ArrayList<Item> allItems = freezedItems.getAllItems();
-        ArrayAdapter<String> adapter;
+        final ArrayList<Item> allItems = frozenItems.getAllItems();
         ListView lv = (ListView) findViewById(R.id.itemList);
 
-        adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_2, android.R.id.text1, allItems) {
+        this.listAdapter = new ArrayAdapter (this, android.R.layout.simple_list_item_2, android.R.id.text1, allItems) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView text1 = (TextView) view.findViewById(android.R.id.text1);
@@ -128,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 return view;
             }
         };
-        lv.setAdapter(adapter);
+        lv.setAdapter(this.listAdapter);
     }
 
     public void createItem(View view) {

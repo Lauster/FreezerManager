@@ -8,40 +8,77 @@
     tools:context="de.geek_hub.freezermanager.ItemDetailActivity"
     tools:showIn="@layout/activity_item_detail">
 
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/text_margin"
-        android:orientation="vertical">
+        android:columnCount="2"
+        android:rowCount="4"
+        android:orientation="horizontal"
+        android:padding="@dimen/text_margin">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/item_detail_size_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/text_margin"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/item_detail_size"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/text_margin"
             android:textSize="18sp"
-            android:text="Gewicht: 1.5 kg"/>
+            android:text=""/>
 
         <TextView
+            android:id="@+id/item_detail_freeze_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="@dimen/text_margin"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="@string/item_detail_freeze_date" />
+        <TextView
+            android:id="@+id/item_detail_freeze_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingBottom="@dimen/text_margin"
             android:textSize="18sp"
-            android:text="Einfrierdatum: 22.07.2016" />
+            android:text="" />
 
         <TextView
+            android:id="@+id/item_detail_exp_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="@dimen/text_margin"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="@string/item_detail_exp_date" />
+        <TextView
+            android:id="@+id/item_detail_exp_date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingBottom="@dimen/text_margin"
             android:textSize="18sp"
-            android:text="Haltbarkeitsdatum: 22.04.2017" />
+            android:text="" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/item_detail_category_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/text_margin"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="@string/item_detail_category" />
+        <TextView
+            android:id="@+id/item_detail_category"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/text_margin"
             android:textSize="18sp"
-            android:text="Kategorie: Fleisch" />
+            android:text="" />
 
-    </LinearLayout>
+    </GridLayout>
 
 </android.support.v4.widget.NestedScrollView>

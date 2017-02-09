@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Important: Order and content of all arrays has to match! -->
+<resources>
+    <string-array name="unit_ids">
+        <item>mass</item>
+        <item>volume</item>
+        <item>pieces</item>
+    </string-array>
+
+    <string-array name="units">
+        <item>@string/mass</item>
+        <item>@string/volume</item>
+        <item>@string/pieces</item>
+    </string-array>
+
+    <string-array name="unit_labels">
+        <item>@string/mass_label</item>
+        <item>@string/volume_label</item>
+        <item>@string/pieces_label</item>
+    </string-array>
+</resources>

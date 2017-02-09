@@ -32,6 +32,14 @@ public class ItemList {
         saveItems();
     }
 
+    public Item deleteItem(int position) {
+        Item deletedItem = this.itemList.remove(position);
+
+        saveItems();
+
+        return deletedItem;
+    }
+
     private void loadItems() {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         Gson g = new Gson();

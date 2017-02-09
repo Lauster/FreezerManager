@@ -43,6 +43,7 @@
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_whatshot_black_24dp"
         android:tint="@android:color/white"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        android:onClick="defrostItem"/>
 
 </android.support.design.widget.CoordinatorLayout>
