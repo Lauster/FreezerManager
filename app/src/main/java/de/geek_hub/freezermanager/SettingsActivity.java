@@ -19,7 +19,6 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
@@ -136,12 +135,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            if (!super.onMenuItemSelected(featureId, item)) {
-                NavUtils.navigateUpFromSameTask(this);
-            }
-            return true;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return super.onMenuItemSelected(featureId, item);
     }
@@ -190,6 +188,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("notification_expiration"));
             bindPreferenceSummaryToValue(findPreference("notification_expiration_ringtone"));
+
+            // TODO: fix summary update, handle orientation change, update directly on create
+            ListPreference notifications = (ListPreference)findPreference("notification_expiration");
+            notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (newValue.toString().equals("-1")) {
+                        findPreference("notification_expiration_ringtone").setEnabled(false);
+                        findPreference("notification_expiration_vibrate").setEnabled(false);
+                    } else {
+                        findPreference("notification_expiration_ringtone").setEnabled(true);
+                        findPreference("notification_expiration_vibrate").setEnabled(true);
+                    }
+                    return true;
+                }
+            });
         }
 
         @Override

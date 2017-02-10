@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_settings:
                 Intent settings = new Intent(this, SettingsActivity.class);
+                settings.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT,
+                        SettingsActivity.NotificationPreferenceFragment.class.getName() );
+                settings.putExtra(SettingsActivity.EXTRA_NO_HEADERS, true );
                 startActivity(settings);
             default:
                 return true;
@@ -87,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
         switch (requestCode) {
             case NEW_ITEM_REQUEST:
                 Item newItem = data.getParcelableExtra("newItem");

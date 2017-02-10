@@ -45,7 +45,8 @@
             android:ems="10"
             android:id="@+id/new_item_size"
             android:hint="@string/mass_label"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:digits="0123456789.," />
 
         <Spinner
             android:layout_width="wrap_content"
@@ -64,7 +65,10 @@
         android:inputType="date"
         android:ems="10"
         android:hint="@string/exp_date"
-        android:id="@+id/new_item_exp_date"/>
+        android:focusable="false"
+        android:id="@+id/new_item_exp_date"
+        android:onClick="openDatePicker"
+        android:cursorVisible="false" />
 
     <Spinner
         android:layout_width="match_parent"

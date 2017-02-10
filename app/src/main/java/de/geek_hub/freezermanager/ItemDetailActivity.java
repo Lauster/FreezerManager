@@ -1,10 +1,11 @@
 package de.geek_hub.freezermanager;
 
 import android.content.Intent;
-import android.text.format.DateFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import java.text.DecimalFormat;
@@ -28,6 +29,17 @@ public class ItemDetailActivity extends AppCompatActivity {
         this.id = i.getIntExtra("id", -1);
 
         fillWithItemData();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void fillWithItemData() {
