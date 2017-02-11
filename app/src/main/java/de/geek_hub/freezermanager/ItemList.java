@@ -18,12 +18,16 @@ class ItemList {
         loadItems();
     }
 
-    public ArrayList getAllItems() {
+    public ArrayList<Item> getAllItems() {
         return this.itemList;
     }
 
     public Item getItem(int position) {
         return this.itemList.get(position);
+    }
+
+    public int length() {
+        return itemList.size();
     }
 
     public void addItem(Item item) {
@@ -44,7 +48,7 @@ class ItemList {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         Gson g = new Gson();
         Type type = new TypeToken<ArrayList<Item>>() {}.getType();
-        this.itemList = (ArrayList<Item>) g.fromJson(prefs.getString("items", g.toJson(new ArrayList<Item>())), type);
+        this.itemList = g.fromJson(prefs.getString("items", g.toJson(new ArrayList<Item>())), type);
     }
 
     private void saveItems() {
@@ -52,6 +56,6 @@ class ItemList {
         Gson g = new Gson();
 
         Type type = new TypeToken<ArrayList<Item>>() {}.getType();
-        prefs.edit().putString("items", g.toJson(this.itemList, type)).commit();
+        prefs.edit().putString("items", g.toJson(this.itemList, type)).apply();
     }
 }

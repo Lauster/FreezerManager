@@ -64,6 +64,22 @@
             android:text="" />
 
         <TextView
+            android:id="@+id/item_detail_section_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/text_margin"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="@string/item_detail_section" />
+        <TextView
+            android:id="@+id/item_detail_section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/text_margin"
+            android:textSize="18sp"
+            android:text="" />
+
+        <TextView
             android:id="@+id/item_detail_category_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

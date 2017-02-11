@@ -20,12 +20,12 @@
         </activity>
         <activity
             android:name=".NewItemActivity"
-            android:label="@string/title_activity_new_item"
+            android:label="@string/new_item_title"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ItemDetailActivity"
-            android:label="@string/title_activity_item_detail"
+            android:label="@string/item_detail_title"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

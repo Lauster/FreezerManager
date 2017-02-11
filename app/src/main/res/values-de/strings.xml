@@ -4,14 +4,13 @@
     <string name="action_settings">Einstellungen</string>
     <string name="action_sort">Sortieren</string>
     <string name="action_filter">Filtern</string>
-    <string name="change_photo">Ändern</string>
+    <string name="new_item_change_photo">Ändern</string>
     <string name="new_item_done">Fertig</string>
-    <string name="title_activity_item_detail"></string>
-    <string name="title_activity_new_item">Essen einfrieren</string>
+    <string name="item_detail_title"></string>
+    <string name="new_item_title">Essen einfrieren</string>
     <string name="app_name_full">Gefrierschrank Manager</string>
-    <string name="weight">Gewicht</string>
-    <string name="exp_date">Haltbarkeitsdatum</string>
-    <string name="category">Kategorie</string>
+    <string name="new_item_exp_date">Haltbarkeitsdatum</string>
+    <string name="new_item_category">Kategorie</string>
     <string name="meat">Fleisch</string>
     <string name="fruits">Obst</string>
     <string name="vegetables">Gemüse</string>
@@ -34,11 +33,10 @@
     <string name="three_days">3 Tage</string>
     <string name="three_weeks">3 Wochen</string>
     <string name="two_weeks">2 Wochen</string>
-    <string name="item_detail_weight">Gewicht: </string>
     <string name="item_detail_freeze_date">Einfrierdatum: </string>
     <string name="item_detail_exp_date">Haltbarkeitsdatum: </string>
     <string name="item_detail_category">Kategorie: </string>
-    <string name="insert_name">Bitte gib einen Namen ein</string>
+    <string name="new_item_insert_name">Bitte gib einen Namen ein</string>
     <string name="snackbar_defrost">\u0020aufgetaut</string>
     <string name="snackbar_defrost_undo">Rückgängig</string>
     <string name="mass">g</string>
@@ -49,4 +47,7 @@
     <string name="mass_label">Gewicht</string>
     <string name="pref_notification_before">vorher</string>
     <string name="pref_ringtone_silent">Stumm</string>
+    <string name="new_item_section_label">Fach %1$d</string>
+    <string name="item_detail_section">Fach:</string>
+    <string name="item_detail_size">%1$s</string>
 </resources>

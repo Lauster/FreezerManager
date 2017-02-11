@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -186,23 +187,46 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
+            bindPreferenceSummaryToValue(findPreference("layout_sections"));
             bindPreferenceSummaryToValue(findPreference("notification_expiration"));
             bindPreferenceSummaryToValue(findPreference("notification_expiration_ringtone"));
 
-            // TODO: fix summary update, handle orientation change, update directly on create
-            ListPreference notifications = (ListPreference)findPreference("notification_expiration");
-            notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (newValue.toString().equals("-1")) {
-                        findPreference("notification_expiration_ringtone").setEnabled(false);
-                        findPreference("notification_expiration_vibrate").setEnabled(false);
-                    } else {
-                        findPreference("notification_expiration_ringtone").setEnabled(true);
-                        findPreference("notification_expiration_vibrate").setEnabled(true);
-                    }
+            EditTextPreference layoutSections = (EditTextPreference) findPreference("layout_sections");
+            layoutSections.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    EditTextPreference editPref = (EditTextPreference) preference;
+                    editPref.getEditText().setSelection(editPref.getText().length());
                     return true;
                 }
             });
+            layoutSections.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (newValue.toString().equals("")) {
+                        return false;
+                    } else if (Integer.parseInt(newValue.toString()) > 1000) {
+                        return false;
+                    } else {
+                        // call the onChange method manually, because the change listener got overwritten
+                        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, newValue);
+                        return true;
+                    }
+                }
+            });
+
+            ListPreference notifications = (ListPreference)findPreference("notification_expiration");
+            notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    updateDependencies(newValue.toString());
+
+                    // call the onChange method manually, because the change listener got overwritten
+                    sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, newValue);
+                    return true;
+                }
+            });
+
+            updateDependencies(notifications.getValue());
         }
 
         @Override
@@ -213,6 +237,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        public void updateDependencies(String newValue) {
+            if (newValue.equals("-1")) {
+                findPreference("notification_expiration_ringtone").setEnabled(false);
+                findPreference("notification_expiration_vibrate").setEnabled(false);
+            } else {
+                findPreference("notification_expiration_ringtone").setEnabled(true);
+                findPreference("notification_expiration_vibrate").setEnabled(true);
+            }
         }
     }
 }

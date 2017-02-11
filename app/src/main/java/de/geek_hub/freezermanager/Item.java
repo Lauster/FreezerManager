@@ -8,10 +8,11 @@ import java.util.Date;
 
 public class Item implements Parcelable {
     private String name;
-    private float size;
+    private double size;
     private String unit;
     private Date freezeDate;
     private Date expDate;
+    private int section;
     private String category;
 
     public Item(String name) {
@@ -19,11 +20,11 @@ public class Item implements Parcelable {
         setFreezeDate(new Date());
     }
 
-    public float getSize() {
+    public double getSize() {
         return size;
     }
 
-    public void setSize(float size) {
+    public void setSize(double size) {
         this.size = size;
     }
 
@@ -51,6 +52,14 @@ public class Item implements Parcelable {
         this.freezeDate = freezeDate;
     }
 
+    public int getSection() {
+        return section;
+    }
+
+    public void setSection(int section) {
+        this.section = section;
+    }
+
     public String getCategory() {
         return category;
     }
@@ -76,7 +85,7 @@ public class Item implements Parcelable {
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(this.name);
-        out.writeFloat(this.size);
+        out.writeDouble(this.size);
         out.writeString(this.unit);
         out.writeLong(this.freezeDate.getTime());
         if (this.expDate == null) {
@@ -84,6 +93,7 @@ public class Item implements Parcelable {
         } else {
             out.writeLong(this.expDate.getTime());
         }
+        out.writeInt(this.section);
         out.writeString(this.category);
     }
 
@@ -99,7 +109,7 @@ public class Item implements Parcelable {
 
     private Item(Parcel in) {
         this.name = in.readString();
-        this.size = in.readFloat();
+        this.size = in.readDouble();
         this.unit = in.readString();
         this.freezeDate = new Date(in.readLong());
         long expDate = in.readLong();
@@ -108,6 +118,7 @@ public class Item implements Parcelable {
         } else {
             this.expDate = new Date(expDate);
         }
+        this.section = in.readInt();
         this.category = in.readString();
     }
 }

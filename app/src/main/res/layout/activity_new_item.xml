@@ -64,11 +64,16 @@
         android:layout_height="50dp"
         android:inputType="date"
         android:ems="10"
-        android:hint="@string/exp_date"
+        android:hint="@string/new_item_exp_date"
         android:focusable="false"
         android:id="@+id/new_item_exp_date"
         android:onClick="openDatePicker"
         android:cursorVisible="false" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/new_item_section" />
 
     <Spinner
         android:layout_width="match_parent"

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class NewItemActivity extends AppCompatActivity {
@@ -38,7 +40,6 @@ public class NewItemActivity extends AppCompatActivity {
 
         final char separator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
         newItemSize.setKeyListener(DigitsKeyListener.getInstance("0123456789" + separator));
-
         newItemSize.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -50,6 +51,9 @@ public class NewItemActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String input = s.toString();
                 boolean separatorDetected = false;
+                if (input.length() > 10) {
+                    s.delete(10, input.length());
+                }
                 for (int i = 0; i < input.length(); i++) {
                     if ((separator + ",.").contains(String.valueOf(input.charAt(i)))) {
                         if (!separatorDetected) {
@@ -80,6 +84,18 @@ public class NewItemActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        ArrayList<String> sections = new ArrayList<>();
+        Integer layoutSections = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
+                .getString("layout_sections", "1"));
+        for (int i = 1; i <= layoutSections; i++) {
+            sections.add(String.format(getResources().getString(R.string.new_item_section_label), i));
+        }
+
+        Spinner sectionSpinner = (Spinner) findViewById(R.id.new_item_section);
+        ArrayAdapter<String> sectionAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, sections);
+        sectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sectionSpinner.setAdapter(sectionAdapter);
 
         Spinner categorySpinner = (Spinner) findViewById(R.id.new_item_category);
         ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this,
@@ -140,16 +156,16 @@ public class NewItemActivity extends AppCompatActivity {
 
         if (name.isEmpty()) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
-            Snackbar.make(findViewById(R.id.activity_new_item), R.string.insert_name, Snackbar.LENGTH_SHORT).show();
+            imm.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), 0);
+            Snackbar.make(findViewById(R.id.activity_new_item), R.string.new_item_insert_name, Snackbar.LENGTH_SHORT).show();
         } else {
             Item newItem = new Item(name);
 
-            String sizeStr = ((EditText) findViewById(R.id.new_item_size)).getText().toString().trim();
+            String sizeStr = ((EditText) findViewById(R.id.new_item_size)).getText().toString();
             if (sizeStr.isEmpty()) {
                 newItem.setSize(-1);
             } else {
-                newItem.setSize(Float.parseFloat(sizeStr.replace(',', '.')));
+                newItem.setSize(Double.parseDouble(sizeStr.replace(',', '.')));
             }
 
             String[] units = getResources().getStringArray(R.array.unit_ids);
@@ -158,6 +174,8 @@ public class NewItemActivity extends AppCompatActivity {
             if (!((EditText) findViewById(R.id.new_item_exp_date)).getText().toString().isEmpty()) {
                 newItem.setExpDate(expDate.getTime());
             }
+
+            newItem.setSection(((Spinner) findViewById(R.id.new_item_section)).getSelectedItemPosition());
 
             String[] categories = getResources().getStringArray(R.array.category_ids);
             newItem.setCategory(categories[((Spinner) findViewById(R.id.new_item_category)).getSelectedItemPosition()]);

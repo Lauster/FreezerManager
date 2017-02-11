@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class ItemDetailActivity extends AppCompatActivity {
     private Item item;
@@ -22,7 +23,9 @@ public class ItemDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent i = getIntent();
         this.item = i.getParcelableExtra("item");
@@ -57,22 +60,17 @@ public class ItemDetailActivity extends AppCompatActivity {
             String[] unitLabels = getResources().getStringArray(R.array.unit_labels);
 
             ((TextView) findViewById(R.id.item_detail_size_label))
-                    .setText(unitLabels[Arrays.asList(unitIds).indexOf(this.item.getUnit())] + ":");
+                    .setText(String.format(getResources().getString(R.string.item_detail_size),
+                            unitLabels[Arrays.asList(unitIds).indexOf(this.item.getUnit())]));
             ((TextView) findViewById(R.id.item_detail_size))
                     .setText(String.format("%s %s",
-                            new DecimalFormat("0.######").format(this.item.getSize()),
+                            new DecimalFormat("##########.##########").format(this.item.getSize()),
                             units[Arrays.asList(unitIds).indexOf(this.item.getUnit())]));
         }
 
         java.text.DateFormat dateFormat = DateFormat.getDateFormat(getApplicationContext());
-        if (this.item.getFreezeDate() == null) {
-            findViewById(R.id.item_detail_freeze_date_label).setVisibility(View.GONE);
-            findViewById(R.id.item_detail_freeze_date).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.item_detail_freeze_date_label).setVisibility(View.VISIBLE);
-            findViewById(R.id.item_detail_freeze_date).setVisibility(View.VISIBLE);
-            ((TextView) findViewById(R.id.item_detail_freeze_date)).setText(dateFormat.format(this.item.getFreezeDate()));
-        }
+        ((TextView) findViewById(R.id.item_detail_freeze_date)).setText(dateFormat.format(this.item.getFreezeDate()));
+
         if (this.item.getExpDate() == null) {
             findViewById(R.id.item_detail_exp_date_label).setVisibility(View.GONE);
             findViewById(R.id.item_detail_exp_date).setVisibility(View.GONE);
@@ -81,6 +79,9 @@ public class ItemDetailActivity extends AppCompatActivity {
             findViewById(R.id.item_detail_exp_date).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.item_detail_exp_date)).setText(dateFormat.format(this.item.getExpDate()));
         }
+
+        ((TextView) findViewById(R.id.item_detail_section))
+                .setText(String.format(Locale.getDefault(), "%1$d", this.item.getSection() + 1));
 
         String[] categoryIds = getResources().getStringArray(R.array.category_ids);
         String[] categories = getResources().getStringArray(R.array.categories);

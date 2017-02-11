@@ -10,6 +10,8 @@
             android:numeric="integer" />
     </PreferenceCategory>
 
+    <!-- TODO: add option for units (automatic, imperial, metric) -->
+
     <PreferenceCategory
         android:title="@string/pref_header_notifications"
         android:key="pref_notifications">
@@ -17,7 +19,7 @@
         <!-- A 'parent' preference, which enables/disables child preferences (below)
              when checked/unchecked. -->
         <ListPreference
-            android:defaultValue="14"
+            android:defaultValue="21"
             android:entries="@array/pref_before_exp_titles"
             android:entryValues="@array/pref_before_exp_values"
             android:key="notification_expiration"
