@@ -1,6 +1,9 @@
 package de.geek_hub.freezermanager;
 
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -14,14 +17,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+/* TODO:
+- implement notifications
+- (add additional settings)
+- (add grouping: none, sections, categories)
+- (add photos)
+- (sort desc)
+ */
+
+public class MainActivity extends AppCompatActivity implements SortDialogFragment.SortDialogListener {
     private ItemList frozenItems;
     private RecyclerView itemList;
     private RecyclerView.Adapter itemListAdapter;
 
-    static final int NEW_ITEM_REQUEST = 10;
+    static final int ITEM_CREATE_REQUEST = 10;
+    static final int ITEM_EDIT_REQUEST = 11;
     static final int ITEM_DETAIL_REQUEST = 20;
 
     @Override
@@ -34,16 +45,16 @@ public class MainActivity extends AppCompatActivity {
         this.frozenItems = new ItemList(this);
         this.itemList = (RecyclerView) findViewById(R.id.item_list);
 
+        SharedPreferences prefs = getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
+        this.frozenItems.sortList(prefs.getString("sort", "name"));
+
         showItems();
 
-        ItemClickSupport.addTo(itemList).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
-                itemDetail.putExtra("item", frozenItems.getItem(position));
-                itemDetail.putExtra("id", position);
-                startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
-            }
+        ItemClickSupport.addTo(itemList).setOnItemClickListener((recyclerView, position, v) -> {
+            Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
+            itemDetail.putExtra("item", frozenItems.getItem(position));
+            itemDetail.putExtra("id", position);
+            startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
         });
     }
 
@@ -53,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         paintIconWhite(menu.findItem(R.id.action_sort));
-        paintIconWhite(menu.findItem(R.id.action_filter));
+        //paintIconWhite(menu.findItem(R.id.action_filter));
 
         return true;
     }
@@ -82,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
                         SettingsActivity.NotificationPreferenceFragment.class.getName() );
                 settings.putExtra(SettingsActivity.EXTRA_NO_HEADERS, true );
                 startActivity(settings);
+                return true;
+            case R.id.action_sort:
+                SortDialogFragment sortDialog = new SortDialogFragment();
+                sortDialog.show(getFragmentManager(), "sort");
+                return true;
             default:
                 return true;
         }
@@ -92,19 +108,39 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_CANCELED) {
             return;
         }
+        SharedPreferences prefs = getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         switch (requestCode) {
-            case NEW_ITEM_REQUEST:
+            case ITEM_CREATE_REQUEST:
                 Item newItem = data.getParcelableExtra("newItem");
 
-                frozenItems.addItem(newItem);
+                this.frozenItems.addItem(newItem);
 
-                this.showItems();
+                this.frozenItems.sortList(prefs.getString("sort", "name"));
+                this.itemListAdapter.notifyDataSetChanged();
+                break;
+            case ITEM_EDIT_REQUEST:
+                Item editedItem = data.getParcelableExtra("item");
+                int id = data.getIntExtra("id", -1);
+
+                this.frozenItems.deleteItem(id);
+                int newId = this.frozenItems.addItem(editedItem);
+
+                this.frozenItems.sortList(prefs.getString("sort", "name"));
+                this.itemListAdapter.notifyDataSetChanged();
+
+                Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
+                itemDetail.putExtra("item", frozenItems.getItem(newId));
+                itemDetail.putExtra("id", newId);
+                startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
                 break;
             case ITEM_DETAIL_REQUEST:
                 switch (data.getStringExtra("action")) {
                     case "defrost":
                         final Item deletedItem = this.frozenItems.deleteItem(data.getIntExtra("id", -1));
+
+                        this.frozenItems.sortList(prefs.getString("sort", "name"));
                         this.itemListAdapter.notifyDataSetChanged();
+
                         Snackbar.make(findViewById(R.id.main_activity_inner_coordinator_layout),
                                     deletedItem.getName() + getResources().getString(R.string.snackbar_defrost),
                                     Snackbar.LENGTH_LONG)
@@ -118,15 +154,13 @@ public class MainActivity extends AppCompatActivity {
                                 .show();
                         break;
                     case "edit":
-                        Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
-                        itemDetail.putExtra("item", frozenItems.getItem(0));
-                        itemDetail.putExtra("id", 0);
-                        startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
+                        Intent itemEdit = new Intent(getApplicationContext(), ItemEditActivity.class);
+                        itemEdit.putExtra("action", "edit");
+                        itemEdit.putExtra("item", frozenItems.getItem(data.getIntExtra("id", -1)));
+                        itemEdit.putExtra("id", data.getIntExtra("id", -1));
+                        startActivityForResult(itemEdit, ITEM_EDIT_REQUEST);
                         break;
                 }
-                break;
-            default:
-                Toast.makeText(this, requestCode + "\n" + resultCode, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -138,14 +172,54 @@ public class MainActivity extends AppCompatActivity {
         this.itemList.setLayoutManager(itemListLayoutManager);
 
         this.itemListAdapter = new ItemListAdapter(this.frozenItems, this);
-        itemList.setAdapter(itemListAdapter);
+
+        /* //This is the code to provide a sectioned list
+        List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
+
+        //Sections
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0,"Section 1"));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(5,"Section 2"));
+
+        //Add your adapter to the sectionAdapter
+        SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+        SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(this,R.layout.section,R.id.section_text, this.itemListAdapter);
+        mSectionedAdapter.setSections(sections.toArray(dummy));
+
+        itemList.setAdapter(mSectionedAdapter);*/
+        itemList.setAdapter(this.itemListAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(itemList.getContext(), itemListLayoutManager.getOrientation());
         itemList.addItemDecoration(itemDecoration);
     }
 
     public void createItem(View view) {
-        Intent intent = new Intent(this, NewItemActivity.class);
-        startActivityForResult(intent, NEW_ITEM_REQUEST);
+        Intent intent = new Intent(this, ItemEditActivity.class);
+        intent.putExtra("action", "create");
+        startActivityForResult(intent, ITEM_CREATE_REQUEST);
+    }
+
+    @Override
+    public void onSortSelect(DialogFragment dialog, int position) {
+        String sort = "name";
+        switch (position) { // TODO: save sorting preference
+            case 0:
+                sort = "name";
+                break;
+            case 1:
+                sort = "size";
+                break;
+            case 2:
+                sort = "freezeDate";
+                break;
+            case 3:
+                sort = "expDate";
+                break;
+        }
+        this.frozenItems.sortList(sort);
+
+        SharedPreferences prefs = getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
+        prefs.edit().putString("sort", sort).apply();
+
+        this.itemListAdapter.notifyDataSetChanged();
     }
 }

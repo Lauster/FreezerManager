@@ -9,12 +9,12 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_sort_black_24dp"/>
 
-    <item
+    <!--<item
         android:id="@+id/action_filter"
         android:orderInCategory="11"
         android:title="@string/action_filter"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_filter_list_black_24dp" />
+        android:icon="@drawable/ic_filter_list_black_24dp" />-->
 
     <item
         android:id="@+id/action_settings"

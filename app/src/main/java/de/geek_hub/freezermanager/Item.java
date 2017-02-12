@@ -48,7 +48,7 @@ public class Item implements Parcelable {
         return freezeDate;
     }
 
-    private void setFreezeDate(Date freezeDate) {
+    public void setFreezeDate(Date freezeDate) {
         this.freezeDate = freezeDate;
     }
 

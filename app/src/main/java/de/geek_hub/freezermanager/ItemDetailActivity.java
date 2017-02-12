@@ -1,10 +1,14 @@
 package de.geek_hub.freezermanager;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -35,11 +39,36 @@ public class ItemDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_item_detail, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.item_detail_edit);
+
+        if (menuItem != null) {
+            Drawable normalDrawable = menuItem.getIcon();
+            Drawable wrapDrawable = DrawableCompat.wrap(normalDrawable);
+            DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(this, android.R.color.white));
+
+            menuItem.setIcon(wrapDrawable);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.item_detail_edit:
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("action", "edit");
+                returnIntent.putExtra("id", this.id);
+                setResult(RESULT_OK, returnIntent);
+                super.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 
 class ItemList {
     private Context context;
@@ -30,10 +31,12 @@ class ItemList {
         return itemList.size();
     }
 
-    public void addItem(Item item) {
+    public int addItem(Item item) {
         this.itemList.add(item);
 
         saveItems();
+
+        return this.itemList.size() -1;
     }
 
     public Item deleteItem(int position) {
@@ -42,6 +45,26 @@ class ItemList {
         saveItems();
 
         return deletedItem;
+    }
+
+    public void sortList(String attribute) {
+        switch (attribute) {
+            case "name":
+            default:
+                Collections.sort(this.itemList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+                break;
+            case "size":
+                Collections.sort(this.itemList, (o1, o2) -> Double.compare(o2.getSize(), o1.getSize()));
+                break;
+            case "freezeDate":
+                Collections.sort(this.itemList, (o1, o2) -> o1.getFreezeDate().compareTo(o2.getFreezeDate()));
+                break;
+            case "expDate":
+                Collections.sort(this.itemList, (o1, o2) -> o1.getExpDate() == null ? 1 :
+                        o2.getExpDate() == null ? -1 :
+                        o1.getExpDate().compareTo(o2.getExpDate()));
+                break;
+        }
     }
 
     private void loadItems() {

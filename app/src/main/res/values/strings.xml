@@ -10,8 +10,16 @@
     <string name="action_sort">Sort</string>
     <string name="action_filter">Filter</string>
     <string name="action_settings">Settings</string>
+    <string name="pick_sort">Sort by</string>
     <string name="snackbar_defrost">\u0020defrosted</string>
     <string name="snackbar_defrost_undo">Undo</string>
+
+    <string-array name="sort_options">
+        <item>Name</item>
+        <item>Size</item>
+        <item>Freeze date</item>
+        <item>Expiration date</item>
+    </string-array>
 
     <!-- Units -->
 
@@ -37,24 +45,25 @@
     <string name="ice_cream">Ice cream</string>
     <string name="other">Other</string>
 
-    <!-- New item -->
+    <!-- Item edit -->
 
-    <string name="new_item_title">Freeze food</string>
-    <string name="new_item_change_photo">Change</string>
-    <string name="new_item_exp_date">Expiration date</string>
-    <string name="new_item_section_label">Section %1$d</string>
-    <string name="new_item_category">Category</string>
-    <string name="new_item_insert_name">Please insert a name</string>
-    <string name="new_item_done">Done</string>
+    <string name="item_edit_title">Edit food</string>
+    <string name="item_edit_title_create">Freeze food</string>
+    <string name="item_edit_change_photo">Change</string>
+    <string name="item_edit_exp_date">Expiration date</string>
+    <string name="item_edit_section_label">Section %1$d</string>
+    <string name="item_edit_category">Category</string>
+    <string name="item_edit_insert_name">Please insert a name</string>
+    <string name="item_edit_done">Done</string>
 
     <!-- Item detail -->
 
-    <string name="item_detail_title" translatable="false">ItemDetailActivity</string>
     <string name="item_detail_size">%1$s:</string>
     <string name="item_detail_freeze_date">Freeze date:</string>
     <string name="item_detail_exp_date">Expiration date:</string>
     <string name="item_detail_section">Section:</string>
     <string name="item_detail_category">Category:</string>
+    <string name="item_detail_edit">Edit</string>
 
     <!-- Settings -->
 
