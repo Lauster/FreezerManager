@@ -144,12 +144,9 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                         Snackbar.make(findViewById(R.id.main_activity_inner_coordinator_layout),
                                     deletedItem.getName() + getResources().getString(R.string.snackbar_defrost),
                                     Snackbar.LENGTH_LONG)
-                                .setAction(R.string.snackbar_defrost_undo, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        frozenItems.addItem(deletedItem);
-                                        itemListAdapter.notifyDataSetChanged();
-                                    }
+                                .setAction(R.string.snackbar_defrost_undo, view -> {
+                                    frozenItems.addItem(deletedItem);
+                                    itemListAdapter.notifyDataSetChanged();
                                 }).setActionTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
                                 .show();
                         break;
