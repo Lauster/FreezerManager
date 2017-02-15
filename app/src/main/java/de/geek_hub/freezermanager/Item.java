@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.Date;
 
-// only the name is mandatory, all other data is optional
+/**
+ * only the name is mandatory, all other fields are optional
+ */
 
 public class Item implements Parcelable {
     private String name;
@@ -14,6 +16,7 @@ public class Item implements Parcelable {
     private Date expDate;
     private int section;
     private String category;
+    private boolean notifiedAboutExpire = true;
 
     public Item(String name) {
         setName(name);
@@ -42,6 +45,7 @@ public class Item implements Parcelable {
 
     public void setExpDate(Date expDate) {
         this.expDate = expDate;
+        this.notifiedAboutExpire = false;
     }
 
     public Date getFreezeDate() {
@@ -76,6 +80,13 @@ public class Item implements Parcelable {
         this.name = name;
     }
 
+    public boolean notifiedAboutExpire() {
+        return notifiedAboutExpire;
+    }
+
+    public void setNotifiedAboutExpire(boolean notifiedAboutExpire) {
+        this.notifiedAboutExpire = notifiedAboutExpire;
+    }
 
     // Parcelable implementation
 

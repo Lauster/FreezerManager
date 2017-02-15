@@ -1,9 +1,11 @@
 package de.geek_hub.freezermanager;
 
+import android.app.ActivityManager;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -14,12 +16,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 /* TODO:
 - implement notifications
+- empty screen
 - (add additional settings)
 - (add grouping: none, sections, categories)
 - (add photos)
@@ -56,6 +59,15 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
             itemDetail.putExtra("id", position);
             startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
         });
+
+        // set the task description a bit darker, so the title font in the recents menu changes to white
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityManager.TaskDescription taskDescription =
+                    new ActivityManager.TaskDescription(this.getResources().getString(R.string.app_name),
+                        BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
+                        ContextCompat.getColor(this, R.color.colorPrimary600));
+            this.setTaskDescription(taskDescription);
+        }
     }
 
     @Override
@@ -119,18 +131,22 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                 this.itemListAdapter.notifyDataSetChanged();
                 break;
             case ITEM_EDIT_REQUEST:
-                Item editedItem = data.getParcelableExtra("item");
                 int id = data.getIntExtra("id", -1);
 
-                this.frozenItems.deleteItem(id);
-                int newId = this.frozenItems.addItem(editedItem);
+                if (data.getStringExtra("action").equals("edit")) {
+                    Item editedItem = data.getParcelableExtra("item");
 
-                this.frozenItems.sortList(prefs.getString("sort", "name"));
-                this.itemListAdapter.notifyDataSetChanged();
+                    this.frozenItems.deleteItem(id);
+                    id = this.frozenItems.addItem(editedItem);
+
+                    this.frozenItems.sortList(prefs.getString("sort", "name"));
+                    this.itemListAdapter.notifyDataSetChanged();
+                }
 
                 Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
-                itemDetail.putExtra("item", frozenItems.getItem(newId));
-                itemDetail.putExtra("id", newId);
+                itemDetail.putExtra("item", frozenItems.getItem(id));
+                itemDetail.putExtra("id", id);
+                itemDetail.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
                 break;
             case ITEM_DETAIL_REQUEST:
@@ -147,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                                 .setAction(R.string.snackbar_defrost_undo, view -> {
                                     frozenItems.addItem(deletedItem);
                                     itemListAdapter.notifyDataSetChanged();
-                                }).setActionTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                                }).setActionTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                                 .show();
                         break;
                     case "edit":
@@ -198,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
     @Override
     public void onSortSelect(DialogFragment dialog, int position) {
         String sort = "name";
-        switch (position) { // TODO: save sorting preference
+        switch (position) {
             case 0:
                 sort = "name";
                 break;

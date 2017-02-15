@@ -4,12 +4,12 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -33,8 +32,8 @@ import java.util.Calendar;
 public class ItemEditActivity extends AppCompatActivity {
     private String action;
     private Item item;
-    private int id;
     Calendar expDate = Calendar.getInstance();
+    private Intent returnIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,11 +109,16 @@ public class ItemEditActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         this.action = i.getStringExtra("action");
+        this.returnIntent = new Intent();
         if (this.action.equals("edit")) {
             setTitle(getResources().getString(R.string.item_edit_title));
             this.item = i.getParcelableExtra("item");
-            this.id = i.getIntExtra("id", -1);
+            int id = i.getIntExtra("id", -1);
             fillFieldsWithData();
+
+            this.returnIntent.putExtra("id", id);
+            this.returnIntent.putExtra("action", "none");
+            setResult(RESULT_OK, this.returnIntent);
         }
     }
 
@@ -188,14 +192,11 @@ public class ItemEditActivity extends AppCompatActivity {
                 expDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            expDate.set(year, month, dayOfMonth);
+    DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
+        expDate.set(year, month, dayOfMonth);
 
-            java.text.DateFormat dateFormat = DateFormat.getDateFormat(getApplicationContext());
-            ((EditText) findViewById(R.id.item_edit_exp_date)).setText(dateFormat.format(expDate.getTime()));
-        }
+        java.text.DateFormat dateFormat = DateFormat.getDateFormat(getApplicationContext());
+        ((EditText) findViewById(R.id.item_edit_exp_date)).setText(dateFormat.format(expDate.getTime()));
     };
 
     public void saveItem() {
@@ -227,15 +228,14 @@ public class ItemEditActivity extends AppCompatActivity {
             String[] categories = getResources().getStringArray(R.array.category_ids);
             newItem.setCategory(categories[((Spinner) findViewById(R.id.item_edit_category)).getSelectedItemPosition()]);
 
-            Intent returnIntent = new Intent();
             if (this.action.equals("edit")) {
                 newItem.setFreezeDate(this.item.getFreezeDate());
-                returnIntent.putExtra("item", newItem);
-                returnIntent.putExtra("id", this.id);
+                this.returnIntent.putExtra("item", newItem);
+                this.returnIntent.putExtra("action", "edit");
             } else {
-                returnIntent.putExtra("newItem", newItem);
+                this.returnIntent.putExtra("newItem", newItem);
             }
-            setResult(RESULT_OK, returnIntent);
+            setResult(RESULT_OK, this.returnIntent);
             super.finish();
         }
     }

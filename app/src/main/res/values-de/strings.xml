@@ -6,7 +6,8 @@
     <string name="action_filter">Filtern</string>
     <string name="item_edit_change_photo">Ändern</string>
     <string name="item_edit_done">Fertig</string>
-    <string name="item_edit_title">Essen einfrieren</string>
+    <string name="item_edit_title">Essen bearbeiten</string>
+    <string name="item_edit_title_create">Essen einfrieren</string>
     <string name="app_name_full">Gefrierschrank Manager</string>
     <string name="item_edit_exp_date">Haltbarkeitsdatum</string>
     <string name="item_edit_category">Kategorie</string>
@@ -57,4 +58,5 @@
         <item>Haltbarkeitsdatum</item>
     </string-array>
     <string name="item_detail_edit">Bearbeiten</string>
+    <string name="name">Name</string>
 </resources>

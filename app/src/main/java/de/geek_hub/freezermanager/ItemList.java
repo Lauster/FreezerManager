@@ -9,29 +9,29 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 class ItemList {
     private Context context;
     private ArrayList<Item> itemList;
+    private Date nextNotificationDate;
+    private int nextNotificationItemId;
 
-    public ItemList(Context context) {
+    ItemList(Context context) {
         this.context = context;
         loadItems();
+        loadNextNotification();
     }
 
-    public ArrayList<Item> getAllItems() {
-        return this.itemList;
-    }
-
-    public Item getItem(int position) {
+    Item getItem(int position) {
         return this.itemList.get(position);
     }
 
-    public int length() {
+    int length() {
         return itemList.size();
     }
 
-    public int addItem(Item item) {
+    int addItem(Item item) {
         this.itemList.add(item);
 
         saveItems();
@@ -39,7 +39,7 @@ class ItemList {
         return this.itemList.size() -1;
     }
 
-    public Item deleteItem(int position) {
+    Item deleteItem(int position) {
         Item deletedItem = this.itemList.remove(position);
 
         saveItems();
@@ -47,7 +47,23 @@ class ItemList {
         return deletedItem;
     }
 
-    public void sortList(String attribute) {
+    private int getNextExpiringItem() {
+        Item item;
+        Date lowestExpDate = new Date(Long.MAX_VALUE);
+        int itemId = -1;
+        for (int id = 0; id < this.itemList.size(); id++) {
+            item = this.itemList.get(id);
+            if ((item.getExpDate() != null && !item.notifiedAboutExpire()) || id == this.nextNotificationItemId) {
+                if (item.getExpDate().compareTo(lowestExpDate) < 0) {
+                    lowestExpDate = item.getExpDate();
+                    itemId = id;
+                }
+            }
+        }
+        return itemId;
+    }
+
+    void sortList(String attribute) {
         switch (attribute) {
             case "name":
             default:
@@ -80,5 +96,21 @@ class ItemList {
 
         Type type = new TypeToken<ArrayList<Item>>() {}.getType();
         prefs.edit().putString("items", g.toJson(this.itemList, type)).apply();
+    }
+
+    private void loadNextNotification() {
+        this.nextNotificationDate = new Date(this.context
+                .getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
+                .getLong("nextNotificationDate", Long.MAX_VALUE));
+        this.nextNotificationItemId = this.context
+                .getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
+                .getInt("nextNotificationItemId", -1);
+    }
+
+    private void saveNextNotifictaion() {
+        this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
+                .edit().putLong("nextNotificationDate", this.nextNotificationDate.getTime()).apply();
+        this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
+                .edit().putInt("nextNotificationItemId", this.nextNotificationItemId).apply();
     }
 }

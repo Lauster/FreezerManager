@@ -19,15 +19,14 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private boolean mValid = true;
     private int mSectionResourceId;
     private int mTextResourceId;
-    private LayoutInflater mLayoutInflater;
     private RecyclerView.Adapter mBaseAdapter;
-    private SparseArray<Section> mSections = new SparseArray<Section>();
+    private SparseArray<Section> mSections = new SparseArray<>();
 
 
     public SimpleSectionedRecyclerViewAdapter(Context context, int sectionResourceId, int textResourceId,
                                               RecyclerView.Adapter baseAdapter) {
 
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mSectionResourceId = sectionResourceId;
         mTextResourceId = textResourceId;
         mBaseAdapter = baseAdapter;
@@ -118,14 +117,9 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     public void setSections(Section[] sections) {
         mSections.clear();
 
-        Arrays.sort(sections, new Comparator<Section>() {
-            @Override
-            public int compare(Section o, Section o1) {
-                return (o.firstPosition == o1.firstPosition)
-                        ? 0
-                        : ((o.firstPosition < o1.firstPosition) ? -1 : 1);
-            }
-        });
+        Arrays.sort(sections, (o, o1) -> (o.firstPosition == o1.firstPosition)
+                ? 0
+                : ((o.firstPosition < o1.firstPosition) ? -1 : 1));
 
         int offset = 0; // offset positions for the headers we're adding
         for (Section section : sections) {
