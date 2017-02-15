@@ -47,6 +47,14 @@ class ItemList {
         return deletedItem;
     }
 
+    private void setNotification() {
+
+    }
+
+    private void deleteNotification() {
+
+    }
+
     private int getNextExpiringItem() {
         Item item;
         Date lowestExpDate = new Date(Long.MAX_VALUE);

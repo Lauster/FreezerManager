@@ -23,6 +23,7 @@ import android.view.View;
 /* TODO:
 - implement notifications
 - empty screen
+- show section only when there is more than 1 section
 - (add additional settings)
 - (add grouping: none, sections, categories)
 - (add photos)
