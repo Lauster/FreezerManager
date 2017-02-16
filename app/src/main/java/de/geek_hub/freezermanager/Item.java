@@ -106,6 +106,7 @@ public class Item implements Parcelable {
         }
         out.writeInt(this.section);
         out.writeString(this.category);
+        out.writeByte((byte) (this.notifiedAboutExpire ? 1 : 0));
     }
 
     public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
@@ -131,5 +132,6 @@ public class Item implements Parcelable {
         }
         this.section = in.readInt();
         this.category = in.readString();
+        this.notifiedAboutExpire = in.readByte() != 0;
     }
 }

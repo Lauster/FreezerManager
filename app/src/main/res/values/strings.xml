@@ -21,30 +21,6 @@
         <item>Expiration date</item>
     </string-array>
 
-    <!-- Units -->
-
-    <!-- TODO: do research about correct US units
-    fl oz is correct, weight can be oz or lb
-     -->
-    <string name="mass">lb</string>
-    <string name="volume">fl oz</string>
-    <string name="pieces">pc.</string>
-    <string name="mass_label">Weight</string>
-    <string name="volume_label">Volume</string>
-    <string name="pieces_label">Quantity</string>
-
-    <!-- Categories -->
-
-    <string name="meat">Meat</string>
-    <string name="fruits">Fruits</string>
-    <string name="vegetables">Vegetables</string>
-    <string name="fish">Fish</string>
-    <string name="pastry">Pastry</string>
-    <string name="roll">Roll</string>
-    <string name="fast_food">Fast food</string>
-    <string name="ice_cream">Ice cream</string>
-    <string name="other">Other</string>
-
     <!-- Item edit -->
 
     <string name="item_edit_title">Edit food</string>
@@ -101,4 +77,42 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_notification_before">upfront</string>
     <string name="name">Name</string>
+
+    <!-- Units -->
+
+    <!-- TODO: do research about correct US units
+    fl oz is correct, weight can be oz or lb
+     -->
+    <string name="mass">lb</string>
+    <string name="volume">fl oz</string>
+    <string name="pieces">pc.</string>
+    <string name="mass_label">Weight</string>
+    <string name="volume_label">Volume</string>
+    <string name="pieces_label">Quantity</string>
+
+    <!-- Categories -->
+
+    <string name="meat">Meat</string>
+    <string name="fruits">Fruits</string>
+    <string name="vegetables">Vegetables</string>
+    <string name="fish">Fish</string>
+    <string name="pastry">Pastry</string>
+    <string name="roll">Roll</string>
+    <string name="fast_food">Fast food</string>
+    <string name="ice_cream">Ice cream</string>
+    <string name="other">Other</string>
+
+    <!-- Notifications -->
+
+    <string name="notification_expires_today">%1$s expires today.</string>
+    <string name="notification_has_expired_today">%1$s expired today.</string>
+    <plurals name="notification_expires">
+        <item quantity="one">%1$s expires in %2$d day.</item>
+        <item quantity="other">%1$s expires in %2$d days.</item>
+    </plurals>
+    <plurals name="notification_has_expired">
+        <item quantity="one">%1$s expired %2$d day ago.</item>
+        <item quantity="other">%1$s expired %2$d days ago.</item>
+    </plurals>
+
 </resources>

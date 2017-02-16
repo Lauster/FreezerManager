@@ -5,20 +5,30 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
-import android.os.SystemClock;
+import android.preference.PreferenceManager;
 
 public class NotificationHandler {
 
-    public void setNextNotification() {
+    public static void setNextNotification(Context context, Item item) {
+        int notifyBefore = PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt("notification_expiration", 21);
+        long notificationTime = item.getExpDate().getTime() - notifyBefore * 86400000;
+        // TODO: choose correct string, calculate days
+        long id = item.getFreezeDate().getTime();
+        int intId = (int)(id - (long)(Math.floor(id / 1000000000) * 1000000000));
+        String message = context.getResources().getQuantityString(R.plurals.notification_expires, 0, item.getName(), 0);
+        scheduleNotification(context, notificationTime, intId, message);
+    }
+
+    public static void deleteNextNotification() {
 
     }
 
     /**
      * @param time in ms when notification shall be shown
      */
-    public void scheduleNotification(Context context, long time, int notificationId, String text) {
+    private static void scheduleNotification(Context context, long time, int notificationId, String text) {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent activity = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -27,7 +37,6 @@ public class NotificationHandler {
                 .setContentText(text)
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_kitchen_white_24px)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)) // TODO: use setting
                 .setContentIntent(activity)
                 .build();

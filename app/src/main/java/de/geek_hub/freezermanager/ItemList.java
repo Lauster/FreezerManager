@@ -14,7 +14,6 @@ import java.util.Date;
 class ItemList {
     private Context context;
     private ArrayList<Item> itemList;
-    private Date nextNotificationDate;
     private int nextNotificationItemId;
 
     ItemList(Context context) {
@@ -34,25 +33,78 @@ class ItemList {
     int addItem(Item item) {
         this.itemList.add(item);
 
-        saveItems();
+        this.checkNotifications();
+
+        this.saveItems();
 
         return this.itemList.size() -1;
     }
 
     Item deleteItem(int position) {
+        if (position == this.nextNotificationItemId) {
+            this.removeNotification();
+        }
+
         Item deletedItem = this.itemList.remove(position);
 
-        saveItems();
+        if (position == this.nextNotificationItemId) {
+            this.checkNotifications();
+        }
+
+        this.saveItems();
 
         return deletedItem;
     }
 
-    private void setNotification() {
+    void sortList(String attribute) {
+        this.removeNotification();
 
+        switch (attribute) {
+            case "name":
+            default:
+                Collections.sort(this.itemList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+                break;
+            case "size":
+                Collections.sort(this.itemList, (o1, o2) -> Double.compare(o2.getSize(), o1.getSize()));
+                break;
+            case "freezeDate":
+                Collections.sort(this.itemList, (o1, o2) -> o1.getFreezeDate().compareTo(o2.getFreezeDate()));
+                break;
+            case "expDate":
+                Collections.sort(this.itemList, (o1, o2) -> o1.getExpDate() == null ? 1 :
+                        o2.getExpDate() == null ? -1 :
+                        o1.getExpDate().compareTo(o2.getExpDate()));
+                break;
+        }
+
+        this.checkNotifications();
     }
 
-    private void deleteNotification() {
+    private void checkNotifications() {
+        int itemId = getNextExpiringItem();
 
+        if (itemId != this.nextNotificationItemId) {
+            if (this.nextNotificationItemId != -1) {
+                this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
+                this.nextNotificationItemId = -1;
+                NotificationHandler.deleteNextNotification();
+            }
+
+            this.itemList.get(itemId).setNotifiedAboutExpire(true);
+            this.nextNotificationItemId = itemId;
+            NotificationHandler.setNextNotification(this.context, this.itemList.get(itemId));
+
+            this.saveItems();
+            this.saveNextNotification();
+        }
+    }
+
+    private void removeNotification() {
+        if (this.nextNotificationItemId != -1) {
+            this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
+            this.nextNotificationItemId = -1;
+            NotificationHandler.deleteNextNotification();
+        }
     }
 
     private int getNextExpiringItem() {
@@ -71,26 +123,6 @@ class ItemList {
         return itemId;
     }
 
-    void sortList(String attribute) {
-        switch (attribute) {
-            case "name":
-            default:
-                Collections.sort(this.itemList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
-                break;
-            case "size":
-                Collections.sort(this.itemList, (o1, o2) -> Double.compare(o2.getSize(), o1.getSize()));
-                break;
-            case "freezeDate":
-                Collections.sort(this.itemList, (o1, o2) -> o1.getFreezeDate().compareTo(o2.getFreezeDate()));
-                break;
-            case "expDate":
-                Collections.sort(this.itemList, (o1, o2) -> o1.getExpDate() == null ? 1 :
-                        o2.getExpDate() == null ? -1 :
-                        o1.getExpDate().compareTo(o2.getExpDate()));
-                break;
-        }
-    }
-
     private void loadItems() {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         Gson g = new Gson();
@@ -107,17 +139,12 @@ class ItemList {
     }
 
     private void loadNextNotification() {
-        this.nextNotificationDate = new Date(this.context
-                .getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
-                .getLong("nextNotificationDate", Long.MAX_VALUE));
         this.nextNotificationItemId = this.context
                 .getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
                 .getInt("nextNotificationItemId", -1);
     }
 
-    private void saveNextNotifictaion() {
-        this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
-                .edit().putLong("nextNotificationDate", this.nextNotificationDate.getTime()).apply();
+    private void saveNextNotification() {
         this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
                 .edit().putInt("nextNotificationItemId", this.nextNotificationItemId).apply();
     }

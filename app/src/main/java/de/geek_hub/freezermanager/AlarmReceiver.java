@@ -15,5 +15,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification notification = intent.getParcelableExtra("notification");
         int notificationId = intent.getIntExtra("notification_id", 0);
         notificationManager.notify(notificationId, notification);
+
+        // TODO: notify itemList about executed notification
     }
 }
