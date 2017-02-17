@@ -1,16 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- General -->
+
     <string name="app_name">Gefrierschrank</string>
-    <string name="action_settings">Einstellungen</string>
-    <string name="action_sort">Sortieren</string>
-    <string name="action_filter">Filtern</string>
-    <string name="item_edit_change_photo">Ändern</string>
-    <string name="item_edit_done">Fertig</string>
+    <string name="app_name_full">Gefrierschrank Manager</string>
+
+    <!-- MainActivity -->
+
+    <string name="main_action_sort">Sortieren</string>
+    <string name="main_action_filter">Filtern</string>
+    <string name="main_action_settings">Einstellungen</string>
+    <string name="main_pick_sort">Sortieren nach</string>
+    <string name="main_no_items">Wenn du Essen hinzufügst,\n wird es hier angezeigt</string>
+    <string name="main_snackbar_defrost">\u0020aufgetaut</string>
+    <string name="main_snackbar_defrost_undo">Rückgängig</string>
+
+    <string-array name="sort_options">
+        <item>Name</item>
+        <item>Größe</item>
+        <item>Einfrierdatum</item>
+        <item>Haltbarkeitsdatum</item>
+    </string-array>
+
+    <!-- Item edit -->
+
     <string name="item_edit_title">Essen bearbeiten</string>
     <string name="item_edit_title_create">Essen einfrieren</string>
-    <string name="app_name_full">Gefrierschrank Manager</string>
+    <string name="item_edit_name">Name</string>
+    <string name="item_edit_change_photo">Ändern</string>
     <string name="item_edit_exp_date">Haltbarkeitsdatum</string>
+    <string name="item_edit_section_label">Fach %1$d</string>
     <string name="item_edit_category">Kategorie</string>
+    <string name="item_edit_insert_name">Bitte gib einen Namen ein</string>
+    <string name="item_edit_done">Fertig</string>
+
+    <!-- Item detail -->
+
+    <string name="item_detail_size">%1$s:</string>
+    <string name="item_detail_freeze_date">Einfrierdatum:</string>
+    <string name="item_detail_exp_date">Haltbarkeitsdatum:</string>
+    <string name="item_detail_section">Fach:</string>
+    <string name="item_detail_category">Kategorie:</string>
+    <string name="item_detail_edit">Bearbeiten</string>
+
+    <!-- Settings -->
+
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <string name="pref_header_layout">Gefrierschrankaufbau</string>
+    <string name="pref_title_sections">Anzahl der Fächer</string>
+
+    <string name="pref_header_notifications">Benachrichtigungen</string>
+    <string name="pref_title_notification_expiration">Vor Ablauf benachrichtigen</string>
+    <string name="three_days">3 Tage</string>
+    <string name="one_week">1 Woche</string>
+    <string name="two_weeks">2 Wochen</string>
+    <string name="three_weeks">3 Wochen</string>
+    <string name="four_weeks">4 Wochen</string>
+    <string name="never">Nie</string>
+    <string name="pref_title_ringtone">Benachrichtigungston</string>
+    <string name="pref_ringtone_silent">Stumm</string>
+    <string name="pref_title_vibrate">Vibrieren</string>
+    <string name="pref_notification_before">vorher</string>
+
+    <!-- Units -->
+
+    <!-- TODO: do research about correct US units
+    fl oz is correct, weight can be oz or lb
+     -->
+    <string name="mass">g</string>
+    <string name="volume">ml</string>
+    <string name="pieces">St.</string>
+    <string name="mass_label">Gewicht</string>
+    <string name="volume_label">Volumen</string>
+    <string name="pieces_label">Anzahl</string>
+
+    <!-- Categories -->
+
     <string name="meat">Fleisch</string>
     <string name="fruits">Obst</string>
     <string name="vegetables">Gemüse</string>
@@ -20,43 +87,18 @@
     <string name="fast_food">Fast Food</string>
     <string name="ice_cream">Eis</string>
     <string name="other">Sonstiges</string>
-    <string name="title_activity_settings">Einstellungen</string>
-    <string name="pref_title_ringtone">Benachrichtigungston</string>
-    <string name="pref_title_notification_expiration">Vor Ablauf benachrichtigen</string>
-    <string name="pref_title_vibrate">Vibrieren</string>
-    <string name="pref_header_notifications">Benachrichtigungen</string>
-    <string name="pref_header_layout">Gefrierschrankaufbau</string>
-    <string name="pref_title_sections">Anzahl der Fächer</string>
-    <string name="four_weeks">4 Wochen</string>
-    <string name="never">Nie</string>
-    <string name="one_week">1 Woche</string>
-    <string name="three_days">3 Tage</string>
-    <string name="three_weeks">3 Wochen</string>
-    <string name="two_weeks">2 Wochen</string>
-    <string name="item_detail_freeze_date">Einfrierdatum: </string>
-    <string name="item_detail_exp_date">Haltbarkeitsdatum: </string>
-    <string name="item_detail_category">Kategorie: </string>
-    <string name="item_edit_insert_name">Bitte gib einen Namen ein</string>
-    <string name="snackbar_defrost">\u0020aufgetaut</string>
-    <string name="snackbar_defrost_undo">Rückgängig</string>
-    <string name="mass">g</string>
-    <string name="pieces">St.</string>
-    <string name="volume">ml</string>
-    <string name="volume_label">Volumen</string>
-    <string name="pieces_label">Anzahl</string>
-    <string name="mass_label">Gewicht</string>
-    <string name="pref_notification_before">vorher</string>
-    <string name="pref_ringtone_silent">Stumm</string>
-    <string name="item_edit_section_label">Fach %1$d</string>
-    <string name="item_detail_section">Fach:</string>
-    <string name="item_detail_size">%1$s</string>
-    <string name="pick_sort">Sortieren nach</string>
-    <string-array name="sort_options">
-        <item>Name</item>
-        <item>Größe</item>
-        <item>Einfrierdatum</item>
-        <item>Haltbarkeitsdatum</item>
-    </string-array>
-    <string name="item_detail_edit">Bearbeiten</string>
-    <string name="name">Name</string>
+
+    <!-- Notifications -->
+
+    <string name="notification_expires_today">%1$s läuft heute ab.</string>
+    <string name="notification_has_expired_today">%1$s ist heute abgelaufen.</string>
+    <plurals name="notification_expires">
+        <item quantity="one">%1$s läuft in %2$d Tag ab.</item>
+        <item quantity="other">%1$s läuft in %2$d Tagen ab.</item>
+    </plurals>
+    <plurals name="notification_has_expired">
+        <item quantity="one">%1$s ist seit %2$d Tag abgelaufen.</item>
+        <item quantity="other">%1$s ist seit %2$d Tagen abgelaufen.</item>
+    </plurals>
+
 </resources>

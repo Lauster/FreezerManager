@@ -91,15 +91,19 @@ public class ItemEditActivity extends AppCompatActivity {
 
         ArrayList<String> sections = new ArrayList<>();
         Integer layoutSections = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
-                .getString("layout_sections", "1"));
+                .getString("layout_sections", "5"));
         for (int i = 1; i <= layoutSections; i++) {
             sections.add(String.format(getResources().getString(R.string.item_edit_section_label), i));
         }
 
         Spinner sectionSpinner = (Spinner) findViewById(R.id.item_edit_section);
-        ArrayAdapter<String> sectionAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, sections);
-        sectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sectionSpinner.setAdapter(sectionAdapter);
+        if (layoutSections > 1) {
+            ArrayAdapter<String> sectionAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, sections);
+            sectionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sectionSpinner.setAdapter(sectionAdapter);
+        } else {
+            sectionSpinner.setVisibility(View.GONE);
+        }
 
         Spinner categorySpinner = (Spinner) findViewById(R.id.item_edit_category);
         ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this,
@@ -120,9 +124,6 @@ public class ItemEditActivity extends AppCompatActivity {
             this.returnIntent.putExtra("action", "none");
             setResult(RESULT_OK, this.returnIntent);
         }
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     @Override

@@ -3,6 +3,7 @@ package de.geek_hub.freezermanager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -109,8 +110,15 @@ public class ItemDetailActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.item_detail_exp_date)).setText(dateFormat.format(this.item.getExpDate()));
         }
 
-        ((TextView) findViewById(R.id.item_detail_section))
-                .setText(String.format(Locale.getDefault(), "%1$d", this.item.getSection() + 1));
+        Integer layoutSections = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
+                .getString("layout_sections", "5"));
+        TextView section = ((TextView) findViewById(R.id.item_detail_section));
+        if (layoutSections > 1) {
+            section.setText(String.format(Locale.getDefault(), "%1$d", this.item.getSection() + 1));
+        } else {
+            findViewById(R.id.item_detail_section_label).setVisibility(View.GONE);
+            section.setVisibility(View.GONE);
+        }
 
         String[] categoryIds = getResources().getStringArray(R.array.category_ids);
         String[] categories = getResources().getStringArray(R.array.categories);

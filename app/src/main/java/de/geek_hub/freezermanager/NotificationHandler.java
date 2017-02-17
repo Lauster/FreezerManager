@@ -5,7 +5,9 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import java.util.Date;
@@ -63,12 +65,14 @@ public class NotificationHandler {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent activity = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         Notification notification = new Notification.Builder(context)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(text)
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_kitchen_white_24px)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)) // TODO: use setting
+                .setSound(Uri.parse(sp.getString("notification_expiration_ringtone", "content://settings/system/notification_sound")))
+                .setVibrate(new long[]{0, sp.getBoolean("notification_expiration_vibrate", false) ? 200 : 0})
                 .setContentIntent(activity)
                 .build();
 

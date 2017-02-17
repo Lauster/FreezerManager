@@ -21,9 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 /* TODO:
-- implement notifications
 - empty screen
-- show section only when there is more than 1 section
 - (add additional settings)
 - (add grouping: none, sections, categories)
 - (add photos)
@@ -159,9 +157,9 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                         this.itemListAdapter.notifyDataSetChanged();
 
                         Snackbar.make(findViewById(R.id.main_activity_inner_coordinator_layout),
-                                    deletedItem.getName() + getResources().getString(R.string.snackbar_defrost),
+                                    deletedItem.getName() + getResources().getString(R.string.main_snackbar_defrost),
                                     Snackbar.LENGTH_LONG)
-                                .setAction(R.string.snackbar_defrost_undo, view -> {
+                                .setAction(R.string.main_snackbar_defrost_undo, view -> {
                                     frozenItems.addItem(deletedItem);
                                     itemListAdapter.notifyDataSetChanged();
                                 }).setActionTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
@@ -200,10 +198,19 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
         mSectionedAdapter.setSections(sections.toArray(dummy));
 
         itemList.setAdapter(mSectionedAdapter);*/
-        itemList.setAdapter(this.itemListAdapter);
+        this.itemList.setAdapter(this.itemListAdapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(itemList.getContext(), itemListLayoutManager.getOrientation());
-        itemList.addItemDecoration(itemDecoration);
+        this.itemList.addItemDecoration(itemDecoration);
+
+        /*TextView noItems = (TextView) findViewById(R.id.main_no_items);
+        if (this.frozenItems.length() == 0) {
+            this.itemList.setVisibility(View.GONE);
+            noItems.setVisibility(View.VISIBLE);
+        } else {
+            this.itemList.setVisibility(View.VISIBLE);
+            noItems.setVisibility(View.GONE);
+        }*/
     }
 
     public void createItem(View view) {

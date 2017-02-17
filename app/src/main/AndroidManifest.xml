@@ -25,6 +25,7 @@
             android:name=".ItemEditActivity"
             android:label="@string/item_edit_title_create"
             android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateVisible"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ItemDetailActivity"

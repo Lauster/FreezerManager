@@ -16,7 +16,7 @@ public class SortDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-        builder.setTitle(R.string.pick_sort)
+        builder.setTitle(R.string.main_pick_sort)
                 .setItems(R.array.sort_options, (dialog, which) -> sortDialogListener.onSortSelect(SortDialogFragment.this, which))
                 .setNegativeButton(android.R.string.cancel, null);
         return builder.create();

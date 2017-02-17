@@ -199,6 +199,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return false;
                 } else if (Integer.parseInt(newValue.toString()) > 1000) {
                     return false;
+                } else if (Integer.parseInt(newValue.toString()) <= 0) {
+                    return false;
                 } else {
                     // call the onChange method manually, because the change listener got overwritten
                     sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, newValue);
