@@ -120,6 +120,9 @@ public class ItemEditActivity extends AppCompatActivity {
             this.returnIntent.putExtra("action", "none");
             setResult(RESULT_OK, this.returnIntent);
         }
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
     @Override
@@ -155,7 +158,9 @@ public class ItemEditActivity extends AppCompatActivity {
     }
 
     private void fillFieldsWithData() {
-        ((EditText) findViewById(R.id.item_edit_name)).setText(this.item.getName());
+        EditText name = (EditText) findViewById(R.id.item_edit_name);
+        name.setText(this.item.getName());
+        name.setSelection(this.item.getName().length());
 
         if (this.item.getSize() != -1) {
             ((EditText) findViewById(R.id.item_edit_size))
@@ -167,6 +172,8 @@ public class ItemEditActivity extends AppCompatActivity {
         }
 
         if (this.item.getExpDate() != null) {
+            this.expDate.setTime(this.item.getExpDate());
+
             java.text.DateFormat dateFormat = DateFormat.getDateFormat(getApplicationContext());
             ((EditText) findViewById(R.id.item_edit_exp_date)).setText(dateFormat.format(this.item.getExpDate()));
         }

@@ -2,6 +2,7 @@ package de.geek_hub.freezermanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -84,11 +85,7 @@ class ItemList {
         int itemId = getNextExpiringItem();
 
         if (itemId != this.nextNotificationItemId) {
-            if (this.nextNotificationItemId != -1) {
-                this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
-                this.nextNotificationItemId = -1;
-                NotificationHandler.deleteNextNotification();
-            }
+            this.removeNotification();
 
             this.itemList.get(itemId).setNotifiedAboutExpire(true);
             this.nextNotificationItemId = itemId;
@@ -101,9 +98,20 @@ class ItemList {
 
     private void removeNotification() {
         if (this.nextNotificationItemId != -1) {
-            this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
-            this.nextNotificationItemId = -1;
-            NotificationHandler.deleteNextNotification();
+            int notifyBefore = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
+                    .getString("notification_expiration", "21"));
+            long notificationTime = this.itemList.get(this.nextNotificationItemId).getExpDate().getTime() - notifyBefore * 86400000;
+
+            if (notificationTime > new Date().getTime()) {
+                NotificationHandler.deleteNextNotification(this.context, this.itemList.get(this.nextNotificationItemId));
+                this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
+                this.nextNotificationItemId = -1;
+            } else {
+                this.nextNotificationItemId = -1;
+            }
+
+            this.saveItems();
+            this.saveNextNotification();
         }
     }
 
@@ -133,14 +141,12 @@ class ItemList {
     private void saveItems() {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         Gson g = new Gson();
-
         Type type = new TypeToken<ArrayList<Item>>() {}.getType();
         prefs.edit().putString("items", g.toJson(this.itemList, type)).apply();
     }
 
     private void loadNextNotification() {
-        this.nextNotificationItemId = this.context
-                .getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
+        this.nextNotificationItemId = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE)
                 .getInt("nextNotificationItemId", -1);
     }
 
