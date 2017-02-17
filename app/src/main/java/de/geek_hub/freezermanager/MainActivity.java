@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 /* TODO:
 - empty screen
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                 this.frozenItems.addItem(newItem);
 
                 this.frozenItems.sortList(prefs.getString("sort", "name"));
-                this.itemListAdapter.notifyDataSetChanged();
+                this.notifyItemListChanged();
                 break;
             case ITEM_EDIT_REQUEST:
                 int id = data.getIntExtra("id", -1);
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                     id = this.frozenItems.addItem(editedItem);
 
                     this.frozenItems.sortList(prefs.getString("sort", "name"));
-                    this.itemListAdapter.notifyDataSetChanged();
+                    this.notifyItemListChanged();
                 }
 
                 Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
@@ -154,14 +155,14 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                         final Item deletedItem = this.frozenItems.deleteItem(data.getIntExtra("id", -1));
 
                         this.frozenItems.sortList(prefs.getString("sort", "name"));
-                        this.itemListAdapter.notifyDataSetChanged();
+                        this.notifyItemListChanged();
 
                         Snackbar.make(findViewById(R.id.main_activity_inner_coordinator_layout),
                                     deletedItem.getName() + getResources().getString(R.string.main_snackbar_defrost),
                                     Snackbar.LENGTH_LONG)
                                 .setAction(R.string.main_snackbar_defrost_undo, view -> {
                                     frozenItems.addItem(deletedItem);
-                                    itemListAdapter.notifyDataSetChanged();
+                                    this.notifyItemListChanged();
                                 }).setActionTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                                 .show();
                         break;
@@ -203,14 +204,20 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
         DividerItemDecoration itemDecoration = new DividerItemDecoration(itemList.getContext(), itemListLayoutManager.getOrientation());
         this.itemList.addItemDecoration(itemDecoration);
 
-        /*TextView noItems = (TextView) findViewById(R.id.main_no_items);
+        this.notifyItemListChanged();
+    }
+
+    private void notifyItemListChanged() {
+        TextView noItems = (TextView) findViewById(R.id.main_no_items);
         if (this.frozenItems.length() == 0) {
             this.itemList.setVisibility(View.GONE);
             noItems.setVisibility(View.VISIBLE);
         } else {
             this.itemList.setVisibility(View.VISIBLE);
             noItems.setVisibility(View.GONE);
-        }*/
+        }
+
+        this.itemListAdapter.notifyDataSetChanged();
     }
 
     public void createItem(View view) {
@@ -241,6 +248,6 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
         SharedPreferences prefs = getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         prefs.edit().putString("sort", sort).apply();
 
-        this.itemListAdapter.notifyDataSetChanged();
+        this.notifyItemListChanged();
     }
 }
