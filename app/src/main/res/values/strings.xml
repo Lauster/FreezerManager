@@ -82,10 +82,7 @@
 
     <!-- Units -->
 
-    <!-- TODO: do research about correct US units
-    fl oz is correct, weight can be oz or lb
-     -->
-    <string name="mass">lb</string>
+    <string name="mass">oz</string>
     <string name="volume">fl oz</string>
     <string name="pieces">pc.</string>
     <string name="mass_label">Weight</string>
@@ -109,11 +106,11 @@
     <string name="notification_expires_today">%1$s expires today.</string>
     <string name="notification_has_expired_today">%1$s expired today.</string>
     <plurals name="notification_expires">
-        <item quantity="one">%1$s expires in %2$d day.</item>
+        <item quantity="one">%1$s expires tomorrow.</item>
         <item quantity="other">%1$s expires in %2$d days.</item>
     </plurals>
     <plurals name="notification_has_expired">
-        <item quantity="one">%1$s expired %2$d day ago.</item>
+        <item quantity="one">%1$s expired yesterday.</item>
         <item quantity="other">%1$s expired %2$d days ago.</item>
     </plurals>
 

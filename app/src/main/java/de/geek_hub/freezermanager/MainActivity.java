@@ -1,7 +1,6 @@
 package de.geek_hub.freezermanager;
 
 import android.app.ActivityManager;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,22 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-/* TODO:
-- empty screen
-- (add additional settings)
-- (add grouping: none, sections, categories)
-- (add photos)
-- (sort desc)
- */
-
 public class MainActivity extends AppCompatActivity implements SortDialogFragment.SortDialogListener {
     private ItemList frozenItems;
     private RecyclerView itemList;
     private RecyclerView.Adapter itemListAdapter;
 
-    static final int ITEM_CREATE_REQUEST = 10;
-    static final int ITEM_EDIT_REQUEST = 11;
-    static final int ITEM_DETAIL_REQUEST = 20;
+    private static final int ITEM_CREATE_REQUEST = 10;
+    private static final int ITEM_EDIT_REQUEST = 11;
+    private static final int ITEM_DETAIL_REQUEST = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +58,15 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                         BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher),
                         ContextCompat.getColor(this, R.color.colorPrimary600));
             this.setTaskDescription(taskDescription);
+        }
+
+        String action = getIntent().getStringExtra("action");
+        if (action != null && action.equals("itemDetail")) {
+            int id = getIntent().getIntExtra("id", -1);
+            Intent itemDetail = new Intent(this, ItemDetailActivity.class);
+            itemDetail.putExtra("item", frozenItems.getItem(id));
+            itemDetail.putExtra("id", id);
+            startActivityForResult(itemDetail, ITEM_DETAIL_REQUEST);
         }
     }
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                 return true;
             case R.id.action_sort:
                 SortDialogFragment sortDialog = new SortDialogFragment();
-                sortDialog.show(getFragmentManager(), "sort");
+                sortDialog.show(getSupportFragmentManager(), "sort");
                 return true;
             default:
                 return true;
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
         }
     }
 
-    public void showItems() {
+    private void showItems() {
         this.itemList.setHasFixedSize(true);
 
         LinearLayoutManager itemListLayoutManager = new LinearLayoutManager(this);
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
     }
 
     @Override
-    public void onSortSelect(DialogFragment dialog, int position) {
+    public void onSortSelect(int position) {
         String sort = "name";
         switch (position) {
             case 0:

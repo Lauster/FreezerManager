@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -13,51 +14,56 @@ import java.util.Collections;
 import java.util.Date;
 
 class ItemList {
-    private Context context;
+    private final Context context;
     private ArrayList<Item> itemList;
     private int nextNotificationItemId;
 
     ItemList(Context context) {
         this.context = context;
-        loadItems();
-        loadNextNotification();
+        this.loadItems();
+        this.loadNextNotification();
     }
 
     Item getItem(int position) {
+        this.loadItems();
         return this.itemList.get(position);
     }
 
     int length() {
+        this.loadItems();
         return itemList.size();
     }
 
     int addItem(Item item) {
+        this.loadItems();
         this.itemList.add(item);
+        this.saveItems();
 
         this.checkNotifications();
-
-        this.saveItems();
 
         return this.itemList.size() -1;
     }
 
     Item deleteItem(int position) {
+        this.loadItems();
+        this.loadNextNotification();
+
         if (position == this.nextNotificationItemId) {
             this.removeNotification();
         }
 
         Item deletedItem = this.itemList.remove(position);
+        this.saveItems();
 
         if (position == this.nextNotificationItemId) {
             this.checkNotifications();
         }
 
-        this.saveItems();
-
         return deletedItem;
     }
 
     void sortList(String attribute) {
+        this.loadItems();
         this.removeNotification();
 
         switch (attribute) {
@@ -78,6 +84,25 @@ class ItemList {
                 break;
         }
 
+        this.saveItems();
+
+        this.checkNotifications();
+    }
+
+    public void showedNotification() {
+        this.nextNotificationItemId = -1;
+        this.saveNextNotification();
+
+        this.checkNotifications();
+    }
+
+    public void resetLastNotification() {
+        this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
+        this.saveItems();
+
+        this.nextNotificationItemId = -1;
+        this.saveNextNotification();
+
         this.checkNotifications();
     }
 
@@ -89,10 +114,10 @@ class ItemList {
 
             this.itemList.get(itemId).setNotifiedAboutExpire(true);
             this.nextNotificationItemId = itemId;
-            NotificationHandler.setNextNotification(this.context, this.itemList.get(itemId));
-
             this.saveItems();
             this.saveNextNotification();
+
+            NotificationHandler.setNextNotification(this.context, this.itemList.get(itemId), itemId);
         }
     }
 
@@ -105,12 +130,10 @@ class ItemList {
             if (notificationTime > new Date().getTime()) {
                 NotificationHandler.deleteNextNotification(this.context, this.itemList.get(this.nextNotificationItemId));
                 this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
-                this.nextNotificationItemId = -1;
-            } else {
-                this.nextNotificationItemId = -1;
+                this.saveItems();
             }
 
-            this.saveItems();
+            this.nextNotificationItemId = -1;
             this.saveNextNotification();
         }
     }
@@ -133,14 +156,14 @@ class ItemList {
 
     private void loadItems() {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
-        Gson g = new Gson();
+        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
         Type type = new TypeToken<ArrayList<Item>>() {}.getType();
         this.itemList = g.fromJson(prefs.getString("items", g.toJson(new ArrayList<Item>())), type);
     }
 
     private void saveItems() {
         SharedPreferences prefs = this.context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
-        Gson g = new Gson();
+        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
         Type type = new TypeToken<ArrayList<Item>>() {}.getType();
         prefs.edit().putString("items", g.toJson(this.itemList, type)).apply();
     }

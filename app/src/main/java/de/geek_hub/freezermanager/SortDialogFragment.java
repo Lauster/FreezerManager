@@ -2,22 +2,22 @@ package de.geek_hub.freezermanager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 
 public class SortDialogFragment extends DialogFragment {
-    SortDialogListener sortDialogListener;
+    private SortDialogListener sortDialogListener;
 
     public interface SortDialogListener {
-        void onSortSelect(DialogFragment dialog, int position);
+        void onSortSelect(int position);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle(R.string.main_pick_sort)
-                .setItems(R.array.sort_options, (dialog, which) -> sortDialogListener.onSortSelect(SortDialogFragment.this, which))
+                .setItems(R.array.sort_options, (dialog, which) -> sortDialogListener.onSortSelect(which))
                 .setNegativeButton(android.R.string.cancel, null);
         return builder.create();
     }

@@ -2,6 +2,7 @@ package de.geek_hub.freezermanager;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
@@ -19,8 +20,8 @@ public class Item implements Parcelable {
     private boolean notifiedAboutExpire = true;
 
     public Item(String name) {
-        setName(name);
-        setFreezeDate(new Date());
+        this.name = name;
+        this.freezeDate = new Date();
     }
 
     public double getSize() {
@@ -74,10 +75,6 @@ public class Item implements Parcelable {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public boolean notifiedAboutExpire() {

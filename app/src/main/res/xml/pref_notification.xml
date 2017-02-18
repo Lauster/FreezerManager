@@ -10,8 +10,6 @@
             android:numeric="integer" />
     </PreferenceCategory>
 
-    <!-- TODO: add option for units (automatic, imperial, metric) -->
-
     <PreferenceCategory
         android:title="@string/pref_header_notifications"
         android:key="pref_notifications">
@@ -28,6 +26,7 @@
         <!-- Allows the user to choose a ringtone in the 'notification' category. -->
         <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
         <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
+        <!-- TODO: fix ringtone chooser on older android versions -->
         <RingtonePreference
             android:defaultValue="content://settings/system/notification_sound"
             android:key="notification_expiration_ringtone"

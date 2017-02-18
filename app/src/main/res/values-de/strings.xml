@@ -66,9 +66,6 @@
 
     <!-- Units -->
 
-    <!-- TODO: do research about correct US units
-    fl oz is correct, weight can be oz or lb
-     -->
     <string name="mass">g</string>
     <string name="volume">ml</string>
     <string name="pieces">St.</string>
@@ -93,11 +90,11 @@
     <string name="notification_expires_today">%1$s läuft heute ab.</string>
     <string name="notification_has_expired_today">%1$s ist heute abgelaufen.</string>
     <plurals name="notification_expires">
-        <item quantity="one">%1$s läuft in %2$d Tag ab.</item>
+        <item quantity="one">%1$s läuft morgen ab.</item>
         <item quantity="other">%1$s läuft in %2$d Tagen ab.</item>
     </plurals>
     <plurals name="notification_has_expired">
-        <item quantity="one">%1$s ist seit %2$d Tag abgelaufen.</item>
+        <item quantity="one">%1$s ist seit gestern abgelaufen.</item>
         <item quantity="other">%1$s ist seit %2$d Tagen abgelaufen.</item>
     </plurals>
 

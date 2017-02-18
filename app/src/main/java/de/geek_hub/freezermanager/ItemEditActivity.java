@@ -32,7 +32,7 @@ import java.util.Calendar;
 public class ItemEditActivity extends AppCompatActivity {
     private String action;
     private Item item;
-    Calendar expDate = Calendar.getInstance();
+    private Calendar expDate = Calendar.getInstance();
     private Intent returnIntent;
 
     @Override
@@ -200,14 +200,14 @@ public class ItemEditActivity extends AppCompatActivity {
                 expDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
+    private DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
         expDate.set(year, month, dayOfMonth);
 
         java.text.DateFormat dateFormat = DateFormat.getDateFormat(getApplicationContext());
         ((EditText) findViewById(R.id.item_edit_exp_date)).setText(dateFormat.format(expDate.getTime()));
     };
 
-    public void saveItem() {
+    private void saveItem() {
         String name = ((EditText) findViewById(R.id.item_edit_name)).getText().toString().trim();
 
         if (name.isEmpty()) {
@@ -231,7 +231,12 @@ public class ItemEditActivity extends AppCompatActivity {
                 newItem.setExpDate(expDate.getTime());
             }
 
-            newItem.setSection(((Spinner) findViewById(R.id.item_edit_section)).getSelectedItemPosition());
+            int section = ((Spinner) findViewById(R.id.item_edit_section)).getSelectedItemPosition();
+            if (section == -1) {
+                newItem.setSection(0);
+            } else {
+                newItem.setSection(section);
+            }
 
             String[] categories = getResources().getStringArray(R.array.category_ids);
             newItem.setCategory(categories[((Spinner) findViewById(R.id.item_edit_category)).getSelectedItemPosition()]);
