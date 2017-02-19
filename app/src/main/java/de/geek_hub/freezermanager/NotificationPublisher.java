@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 
 public class NotificationPublisher extends BroadcastReceiver {
 
@@ -16,9 +17,11 @@ public class NotificationPublisher extends BroadcastReceiver {
         } else {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            Notification notification = intent.getParcelableExtra("notification");
-            int notificationId = intent.getIntExtra("notification_id", 0);
-            notificationManager.notify(notificationId, notification);
+            if (!PreferenceManager.getDefaultSharedPreferences(context).getString("notification_expiration", "21").equals("-1")) {
+                Notification notification = intent.getParcelableExtra("notification");
+                int notificationId = intent.getIntExtra("notification_id", 0);
+                notificationManager.notify(notificationId, notification);
+            }
 
             ItemList itemList = new ItemList(context);
             itemList.showedNotification();

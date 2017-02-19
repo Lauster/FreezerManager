@@ -97,11 +97,13 @@ class ItemList {
     }
 
     public void resetLastNotification() {
-        this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
-        this.saveItems();
+        if (this.nextNotificationItemId != -1) {
+            this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
+            this.saveItems();
 
-        this.nextNotificationItemId = -1;
-        this.saveNextNotification();
+            this.nextNotificationItemId = -1;
+            this.saveNextNotification();
+        }
 
         this.checkNotifications();
     }
