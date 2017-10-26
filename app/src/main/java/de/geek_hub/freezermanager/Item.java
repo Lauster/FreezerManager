@@ -20,6 +20,9 @@ public class Item implements Parcelable {
     private boolean notifiedAboutExpire = true;
 
     public Item(String name) {
+        if (name == null) throw new IllegalArgumentException("Item name cannot be null");
+        if (name.isEmpty()) throw new IllegalArgumentException("Item name cannot be empty");
+
         this.name = name;
         this.freezeDate = new Date();
     }

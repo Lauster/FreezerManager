@@ -19,6 +19,8 @@ class ItemList {
     private int nextNotificationItemId;
 
     ItemList(Context context) {
+        if (context == null) throw new IllegalArgumentException("Context cannot be null");
+
         this.context = context;
         this.loadItems();
         this.loadNextNotification();
@@ -26,6 +28,9 @@ class ItemList {
 
     Item getItem(int position) {
         this.loadItems();
+
+        if (this.itemList.size() <= position) throw new IllegalArgumentException();
+
         return this.itemList.get(position);
     }
 
@@ -46,16 +51,20 @@ class ItemList {
 
     Item deleteItem(int position) {
         this.loadItems();
-        this.loadNextNotification();
 
-        if (position == this.nextNotificationItemId) {
+        if (this.itemList.size() <= position) throw new IllegalArgumentException();
+
+        this.loadNextNotification();
+        boolean hasNotification = position == this.nextNotificationItemId;
+
+        if (hasNotification) {
             this.removeNotification();
         }
 
         Item deletedItem = this.itemList.remove(position);
         this.saveItems();
 
-        if (position == this.nextNotificationItemId) {
+        if (hasNotification) {
             this.checkNotifications();
         }
 

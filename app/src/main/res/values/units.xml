@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Important: Order and content of all arrays has to match! -->
 <resources>
-    <string-array name="unit_ids">
+    <string-array name="unit_ids" translatable="false">
         <item>mass</item>
         <item>volume</item>
         <item>pieces</item>

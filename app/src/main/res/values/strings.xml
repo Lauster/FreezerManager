@@ -61,7 +61,7 @@
         <item>@string/four_weeks</item>
         <item>@string/never</item>
     </string-array>
-    <string-array name="pref_before_exp_values">
+    <string-array name="pref_before_exp_values" translatable="false">
         <item>3</item>
         <item>7</item>
         <item>14</item>
