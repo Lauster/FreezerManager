@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ItemListInstrumentedTest {
     @Before
+    @After
     public void clearPreferences() {
         Context context = InstrumentationRegistry.getTargetContext();
         SharedPreferences prefs = context.getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
