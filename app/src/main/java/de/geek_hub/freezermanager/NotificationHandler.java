@@ -19,7 +19,7 @@ import java.util.Date;
 
 class NotificationHandler {
 
-    public static void setNextNotification(Context context, Item item, int itemId) {
+    static void setNextNotification(Context context, Item item, int itemId) {
         int notifyBefore = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
                 .getString("notification_expiration", "21"));
         long notificationTime = item.getExpDate().getTime() - notifyBefore * 86400000;
@@ -49,7 +49,7 @@ class NotificationHandler {
         scheduleNotification(context, notificationTime, id, message, itemId);
     }
 
-    public static void deleteNextNotification(Context context, Item item) {
+    static void deleteNextNotification(Context context, Item item) {
         Intent notificationIntent = new Intent(context, NotificationPublisher.class);
         int notificationId = calculateNotificationId(item.getFreezeDate().getTime());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -73,7 +73,17 @@ class NotificationHandler {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         Notification notification;
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notification = new Notification.Builder(context, "expires")
+                    .setContentTitle(context.getString(R.string.app_name))
+                    .setContentText(text)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.drawable.ic_kitchen_white_24px)
+                    .setSound(Uri.parse(sp.getString("notification_expiration_ringtone", "content://settings/system/notification_sound")))
+                    .setVibrate(new long[]{0, sp.getBoolean("notification_expiration_vibrate", false) ? 200 : 0})
+                    .setContentIntent(activity)
+                    .build();
+        } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification = new Notification.Builder(context)
                     .setContentTitle(context.getString(R.string.app_name))
                     .setContentText(text)

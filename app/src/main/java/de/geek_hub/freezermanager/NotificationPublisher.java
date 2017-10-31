@@ -1,6 +1,7 @@
 package de.geek_hub.freezermanager;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,6 +17,13 @@ public class NotificationPublisher extends BroadcastReceiver {
             itemList.resetLastNotification();
         } else {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("expires",
+                        context.getString(R.string.notification_channel),
+                        NotificationManager.IMPORTANCE_DEFAULT);
+                notificationManager.createNotificationChannel(channel);
+            }
 
             if (!PreferenceManager.getDefaultSharedPreferences(context).getString("notification_expiration", "21").equals("-1")) {
                 Notification notification = intent.getParcelableExtra("notification");

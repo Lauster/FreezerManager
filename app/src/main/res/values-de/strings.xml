@@ -87,6 +87,7 @@
 
     <!-- Notifications -->
 
+    <string name="notification_channel">Verfallsbenachrichtigungen</string>
     <string name="notification_expires_today">%1$s läuft heute ab.</string>
     <string name="notification_has_expired_today">%1$s ist heute abgelaufen.</string>
     <plurals name="notification_expires">

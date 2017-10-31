@@ -103,6 +103,7 @@
 
     <!-- Notifications -->
 
+    <string name="notification_channel">Expiration</string>
     <string name="notification_expires_today">%1$s expires today.</string>
     <string name="notification_has_expired_today">%1$s expired today.</string>
     <plurals name="notification_expires">

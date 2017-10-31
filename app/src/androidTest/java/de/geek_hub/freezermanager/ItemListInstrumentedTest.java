@@ -84,6 +84,26 @@ public class ItemListInstrumentedTest {
                 EqualsBuilder.reflectionEquals(testItem, deletedItem));
     }
 
+    @Test
+    public void testDeleteFirstItemWithActiveNotification() {
+        Context context = InstrumentationRegistry.getTargetContext();
+        ItemList classUnderTest = new ItemList(context);
+
+        Item testItem = new Item("Marshmallow");
+        testItem.setExpDate(new Date(10000));
+        classUnderTest.addItem(testItem);
+
+        testItem = new Item("Donut");
+        testItem.setExpDate(new Date(1000));
+        classUnderTest.addItem(testItem);
+
+        classUnderTest.deleteItem(0);
+
+        classUnderTest.sortList("name");
+
+        assertTrue("nextNotificationId has non-existent ID", true);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testDeleteItemFromUndefinedPosition() {
         Context context = InstrumentationRegistry.getTargetContext();

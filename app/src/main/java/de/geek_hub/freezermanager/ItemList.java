@@ -55,18 +55,12 @@ class ItemList {
         if (this.itemList.size() <= position) throw new IllegalArgumentException();
 
         this.loadNextNotification();
-        boolean hasNotification = position == this.nextNotificationItemId;
-
-        if (hasNotification) {
-            this.removeNotification();
-        }
+        this.removeNotification();
 
         Item deletedItem = this.itemList.remove(position);
         this.saveItems();
 
-        if (hasNotification) {
-            this.checkNotifications();
-        }
+        this.checkNotifications();
 
         return deletedItem;
     }
@@ -98,14 +92,14 @@ class ItemList {
         this.checkNotifications();
     }
 
-    public void showedNotification() {
+    void showedNotification() {
         this.nextNotificationItemId = -1;
         this.saveNextNotification();
 
         this.checkNotifications();
     }
 
-    public void resetLastNotification() {
+    void resetLastNotification() {
         if (this.nextNotificationItemId != -1) {
             this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
             this.saveItems();
@@ -136,12 +130,15 @@ class ItemList {
         if (this.nextNotificationItemId != -1) {
             int notifyBefore = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
                     .getString("notification_expiration", "21"));
-            long notificationTime = this.itemList.get(this.nextNotificationItemId).getExpDate().getTime() - notifyBefore * 86400000;
 
-            if (notificationTime > new Date().getTime()) {
-                NotificationHandler.deleteNextNotification(this.context, this.itemList.get(this.nextNotificationItemId));
-                this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
-                this.saveItems();
+            if (this.nextNotificationItemId < this.itemList.size()) {
+                long notificationTime = this.itemList.get(this.nextNotificationItemId).getExpDate().getTime() - notifyBefore * 86400000;
+
+                if (notificationTime > new Date().getTime()) {
+                    NotificationHandler.deleteNextNotification(this.context, this.itemList.get(this.nextNotificationItemId));
+                    this.itemList.get(this.nextNotificationItemId).setNotifiedAboutExpire(false);
+                    this.saveItems();
+                }
             }
 
             this.nextNotificationItemId = -1;
