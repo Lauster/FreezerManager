@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         this.frozenItems = new ItemList(this);
-        this.itemList = (RecyclerView) findViewById(R.id.item_list);
+        this.itemList = findViewById(R.id.item_list);
 
         SharedPreferences prefs = getSharedPreferences("de.geek-hub.freezermanager.data", Context.MODE_PRIVATE);
         this.frozenItems.sortList(prefs.getString("sort", "name"));
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
     }
 
     private void notifyItemListChanged() {
-        TextView noItems = (TextView) findViewById(R.id.main_no_items);
+        TextView noItems = findViewById(R.id.main_no_items);
         if (this.frozenItems.length() == 0) {
             this.itemList.setVisibility(View.GONE);
             noItems.setVisibility(View.VISIBLE);

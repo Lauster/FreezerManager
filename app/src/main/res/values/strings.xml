@@ -29,6 +29,7 @@
     <string name="item_edit_title_create">Freeze food</string>
     <string name="item_edit_name">Name</string>
     <string name="item_edit_change_photo">Change</string>
+    <string name="item_edit_freeze_date">Freeze date</string>
     <string name="item_edit_exp_date">Expiration date</string>
     <string name="item_edit_section_label">Section %1$d</string>
     <string name="item_edit_category">Category</string>

@@ -47,8 +47,8 @@ class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        TextView text1 = (TextView) holder.view.findViewById(R.id.text1);
-        TextView text2 = (TextView) holder.view.findViewById(R.id.text2);
+        TextView text1 = holder.view.findViewById(R.id.text1);
+        TextView text2 = holder.view.findViewById(R.id.text2);
 
         Item item = itemList.getItem(position);
         if (item.getSize() == -1) {

@@ -25,7 +25,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
@@ -112,7 +112,7 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         Integer layoutSections = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this)
                 .getString("layout_sections", "5"));
-        TextView section = ((TextView) findViewById(R.id.item_detail_section));
+        TextView section = findViewById(R.id.item_detail_section);
         if (layoutSections > 1) {
             section.setText(String.format(Locale.getDefault(), "%1$d", this.item.getSection() + 1));
         } else {

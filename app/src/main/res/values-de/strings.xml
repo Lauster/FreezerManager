@@ -29,6 +29,7 @@
     <string name="item_edit_title_create">Essen einfrieren</string>
     <string name="item_edit_name">Name</string>
     <string name="item_edit_change_photo">Ändern</string>
+    <string name="item_edit_freeze_date">Einfrierdatum</string>
     <string name="item_edit_exp_date">Haltbarkeitsdatum</string>
     <string name="item_edit_section_label">Fach %1$d</string>
     <string name="item_edit_category">Kategorie</string>
