@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements SortDialogFragmen
                     this.notifyItemListChanged();
                 }
 
+                // TODO: fix display of wrong item, if list is sorted differently
                 Intent itemDetail = new Intent(getApplicationContext(), ItemDetailActivity.class);
                 itemDetail.putExtra("item", frozenItems.getItem(id));
                 itemDetail.putExtra("id", id);

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class ItemEditActivity extends AppCompatActivity {
     private String action;
@@ -219,7 +220,7 @@ public class ItemEditActivity extends AppCompatActivity {
         } else {
             date = expDate;
             dateListener = expDateListener;
-            maxDate = Long.MAX_VALUE;
+            maxDate = new GregorianCalendar(9999, 12, 31).getTimeInMillis();
             minDate = new Date().getTime();
         }
 
